@@ -1,9 +1,11 @@
 package zs30.interactivequeryvisualizer;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,6 +17,11 @@ public class MainActivity extends AppCompatActivity {
     private ListView list_view;
     ArrayAdapter<String> adapter;
     EditText search_text;
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
         // adding values to list_view
         adapter = new ArrayAdapter<String>(this, R.layout.list_view_item, R.id.product_name, car_brands);
         list_view.setAdapter(adapter);
+
+        //set rule when the search text is on focus and when not
+        search_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
 
         // OnItemClickListener for list_view
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,4 +79,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
