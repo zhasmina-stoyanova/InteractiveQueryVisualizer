@@ -1,6 +1,7 @@
 package zs30.interactivequeryvisualizer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -121,5 +122,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             e.printStackTrace();
         }
         handler.sendEmptyMessage(0);
+    }
+
+    public void onTableBtn(View view) {
+        //open table page
+        Intent intent = new Intent(MainActivity.this, TableActivity.class);
+        startActivity(intent);
     }
 }
