@@ -12,31 +12,36 @@ import android.widget.ListView;
 import android.view.View;
 import android.widget.AdapterView;
 
-public class MainActivity extends AppCompatActivity {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import android.os.Handler;
+import android.os.Message;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements Runnable {
+    boolean hasDuplicateData = false;
     private ListView list_view;
     ArrayAdapter<String> adapter;
     EditText search_text;
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
+    final List<String> car_brands = new ArrayList<String>();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Thread thread = new Thread(this);
+        thread.start();
+
         list_view = (ListView) findViewById(R.id.list_view);
         search_text = (EditText) findViewById(R.id.search_text);
-
-        // Example data
-        String car_brands[] = {"Ford", "Chevrolet", "Kia Motors", "Mazda For", "Tesla", "Infinity Fe", "Lancia", "Mitsubishi", "Peugeot", "Jaguar"};
-
-        // adding values to list_view
-        adapter = new ArrayAdapter<String>(this, R.layout.list_view_item, R.id.product_name, car_brands);
-        list_view.setAdapter(adapter);
 
         //set rule when the search text is on focus and when not
         search_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -80,5 +85,41 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            adapter = new ArrayAdapter<String>(list_view.getContext(), R.layout.list_view_item, R.id.product_name, car_brands);
+            list_view.setAdapter(adapter);
+        }
+    };
 
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Select Records Example by using the Prepared Statement!");
+        Connection con = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection
+                    ("jdbc:mysql://zs30.host.cs.st-andrews.ac.uk:3306/zs30_query_visualizer", "zs30", "F14VMP7v.d47wg");
+            try {
+                String sql = "SELECT name from lookup_views";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    car_brands.add(rs.getString(1));
+                }
+                ps.close();
+                con.close();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        handler.sendEmptyMessage(0);
+    }
 }
