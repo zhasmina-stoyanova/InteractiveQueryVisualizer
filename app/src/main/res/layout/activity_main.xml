@@ -5,19 +5,26 @@
     android:layout_height="match_parent"
     tools:context="zs30.interactivequeryvisualizer.MainActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-
         android:clickable="true"
-        android:focusableInTouchMode="true">
-
+        android:focusableInTouchMode="true"
+        >
         <EditText
+            android:background="@drawable/text_box_border"
             android:id="@+id/search_text"
             android:layout_width="fill_parent"
+            android:textColor="#4d5656"
+            android:textSize="18dip"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:textStyle="italic"
+            android:textColorHint="#839192"
             android:layout_height="wrap_content"
-            android:hint="Search brand"/>
+            android:hint="Search..."/>
         <ListView
             android:id="@+id/list_view"
             android:layout_width="fill_parent"
@@ -37,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#00A6FF"
+            android:background="#1673B4"
             android:text="Attributes"
             android:textColor="#FFFFFF" />
 
@@ -46,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#F56161"
+            android:background="#40509D"
             android:text="Filters"
             android:textColor="#FFFFFF" />
 
@@ -55,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#F3DF2B"
+            android:background="#6F3A8F"
             android:text="Table"
             android:onClick="onTableBtn"
             android:textColor="#FFFFFF" />

@@ -19,9 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TableActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <activity
+            android:name=".TableActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".FilterActivity"></activity>
     </application>
 
 </manifest>
