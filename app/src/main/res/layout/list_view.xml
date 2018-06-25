@@ -6,9 +6,9 @@
     <!--item-->
     <TextView
         android:id="@+id/product_name"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 </LinearLayout>

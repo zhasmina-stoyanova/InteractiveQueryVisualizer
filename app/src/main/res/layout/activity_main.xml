@@ -8,25 +8,30 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical"
         android:clickable="true"
+        android:focusable="true"
         android:focusableInTouchMode="true"
-        >
+        android:orientation="vertical">
+
         <EditText
-            android:background="@drawable/text_box_border"
             android:id="@+id/search_text"
             android:layout_width="fill_parent"
-            android:textColor="#4d5656"
-            android:textSize="18dip"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="16dp"
-            android:textStyle="italic"
-            android:textColorHint="#839192"
             android:layout_height="wrap_content"
-            android:hint="Search..."/>
+            android:background="@drawable/text_box_border"
+            android:hint="@string/search"
+            android:paddingBottom="10dp"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="10dp"
+            android:textColor="#4d5656"
+            android:textColorHint="#839192"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
         <ListView
-            android:id="@+id/list_view"
+            android:id="@+id/attrs_list_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -45,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#1673B4"
-            android:text="Attributes"
+            android:onClick="onAttributeBtn"
+            android:text="@string/attributes"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -54,7 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#40509D"
-            android:text="Filters"
+            android:onClick="onFilterBtn"
+            android:text="@string/filters"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -63,8 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#6F3A8F"
-            android:text="Table"
             android:onClick="onTableBtn"
+            android:text="@string/table"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 </RelativeLayout>

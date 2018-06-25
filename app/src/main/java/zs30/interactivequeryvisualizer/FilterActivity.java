@@ -11,3 +11,4 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
     }
 }
+

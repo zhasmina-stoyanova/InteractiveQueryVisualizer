@@ -21,8 +21,9 @@
         </activity>
         <activity
             android:name=".TableActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".FilterActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FilterActivity" />
+        <activity android:name=".AttributesActivity"></activity>
     </application>
 
 </manifest>

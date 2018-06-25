@@ -21,17 +21,15 @@ import java.sql.SQLException;
 
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
-    boolean hasDuplicateData = false;
     private ListView list_view;
-    ArrayAdapter<String> adapter;
-    EditText search_text;
-    final List<String> car_brands = new ArrayList<String>();
+    private ArrayAdapter<String> adapter;
+    private EditText search_text;
+    private final List<String> car_brands = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         Thread thread = new Thread(this);
         thread.start();
 
-        list_view = (ListView) findViewById(R.id.list_view);
-        search_text = (EditText) findViewById(R.id.search_text);
+        list_view = findViewById(R.id.attrs_list_view);
+        search_text =  findViewById(R.id.search_text);
 
         //set rule when the search text is on focus and when not
         search_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -86,22 +84,24 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
     }
 
-    Handler handler = new Handler() {
+    private final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            adapter = new ArrayAdapter<String>(list_view.getContext(), R.layout.list_view_item, R.id.product_name, car_brands);
+            adapter = new ArrayAdapter<>(list_view.getContext(), R.layout.list_view, R.id.product_name, car_brands);
             list_view.setAdapter(adapter);
         }
     };
 
-    public void hideKeyboard(View view) {
+    private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
     public void run() {
         System.out.println("Select Records Example by using the Prepared Statement!");
-        Connection con = null;
+        Connection con;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection
@@ -127,8 +127,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     public void onTableBtn(View view) {
-        //open table page
+        //opens table page
         Intent intent = new Intent(MainActivity.this, TableActivity.class);
+        startActivity(intent);
+    }
+
+    public void onFilterBtn(View view) {
+        //opens filter page
+        Intent intent = new Intent(MainActivity.this, FilterActivity.class);
+        startActivity(intent);
+    }
+
+    public void onAttributeBtn(View view) {
+        //opens attributes page
+        Intent intent = new Intent(MainActivity.this, AttributesActivity.class);
         startActivity(intent);
     }
 }

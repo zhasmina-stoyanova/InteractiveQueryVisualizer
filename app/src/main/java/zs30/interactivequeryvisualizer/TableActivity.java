@@ -33,12 +33,12 @@ public class TableActivity extends AppCompatActivity {
                 TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
 
-        for (int j = 0; j < headers.length; j++) {
+        for (String header : headers) {
             TextView cell11 = new TextView(this);
 
             cell11.setTextSize(16);
             cell11.setTypeface(null, Typeface.BOLD);
-            cell11.setText(headers[j]);
+            cell11.setText(header);
             cell11.setPadding(5, 0, 15, 5);
             cell11.setTextColor(Color.WHITE);
             trHeaders.addView(cell11);
@@ -71,10 +71,10 @@ public class TableActivity extends AppCompatActivity {
                     TableLayout.LayoutParams.WRAP_CONTENT));
 
 
-            for (int j = 0; j < attrs.length; j++) {
+            for (String attr : attrs) {
                 TextView cell11 = new TextView(this);
 
-                cell11.setText(attrs[j]);
+                cell11.setText(attr);
                 cell11.setPadding(5, 0, 15, 5);
                 tr.addView(cell11);
             }
