@@ -111,9 +111,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 PreparedStatement ps = con.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    for(int i = 0; i < 30; i++) {
+                    //for test
+                    //for(int i = 0; i < 30; i++) {
                         car_brands.add(rs.getString(1));
-                    }
+                    //}
                 }
                 ps.close();
                 con.close();
