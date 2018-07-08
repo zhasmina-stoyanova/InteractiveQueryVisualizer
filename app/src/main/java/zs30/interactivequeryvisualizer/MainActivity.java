@@ -13,19 +13,15 @@ import android.widget.ListView;
 import android.view.View;
 import android.widget.AdapterView;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import android.os.Handler;
-import android.os.Message;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity implements Runnable {
+public class MainActivity extends AppCompatActivity {
     private ListView list_view;
     private ArrayAdapter<String> adapter;
     private EditText search_text;
@@ -36,11 +32,35 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Thread thread = new Thread(this);
-        thread.start();
-
         list_view = findViewById(R.id.attrs_list_view);
         search_text =  findViewById(R.id.search_text);
+
+
+        String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews";
+
+        String response = "";
+        HttpServiceRequest getRequest = new HttpServiceRequest();
+        try {
+            response = getRequest.execute(url).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONArray jsonarray = new JSONArray(response);
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject jsonobject = jsonarray.getJSONObject(i);
+                String name = jsonobject.getString("name");
+                car_brands.add(name);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        adapter = new ArrayAdapter<>(list_view.getContext(), R.layout.list_view, R.id.product_name, car_brands);
+        list_view.setAdapter(adapter);
 
         //set rule when the search text is on focus and when not
         search_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -58,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = (String) parent.getItemAtPosition(position);
                 search_text.setText(selectedItem);
+                ((GlobalVariables) getApplication()).setLookupView(selectedItem);
             }
         });
 
@@ -84,47 +105,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
     }
 
-    private final Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            adapter = new ArrayAdapter<>(list_view.getContext(), R.layout.list_view, R.id.product_name, car_brands);
-            list_view.setAdapter(adapter);
-        }
-    };
-
     private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public void run() {
-        System.out.println("Select Records Example by using the Prepared Statement!");
-        Connection con;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection
-                    ("jdbc:mysql://zs30.host.cs.st-andrews.ac.uk:3306/zs30_query_visualizer", "zs30", "F14VMP7v.d47wg");
-            try {
-                String sql = "SELECT name from lookup_views";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    //for test
-                    //for(int i = 0; i < 30; i++) {
-                        car_brands.add(rs.getString(1));
-                    //}
-                }
-                ps.close();
-                con.close();
-            } catch (SQLException s) {
-                s.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        handler.sendEmptyMessage(0);
     }
 
     public void onTableBtn(View view) {
