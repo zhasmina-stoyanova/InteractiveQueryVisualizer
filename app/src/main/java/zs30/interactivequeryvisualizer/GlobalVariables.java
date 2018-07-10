@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GlobalVariables extends Application {
     private  String lookupView;
-    private  List<String> attributes = new ArrayList<>();
+    private  List<AttributesListItem> attrsListItems = new ArrayList<AttributesListItem>();
     public static final String IP_MOBILE_DEVICE = "192.168.42.16";
 
     public String getLookupView() {
@@ -18,16 +18,15 @@ public class GlobalVariables extends Application {
         this.lookupView = lookupView;
     }
 
-    public List<String> getAttributes() {
-        return attributes;
+    public List<AttributesListItem> getAttrsListItems() {
+        return attrsListItems;
     }
 
-    public void setAttributes(List<String> attributes) {
-        this.attributes = attributes;
+    public void setAttrsListItems(List<AttributesListItem> attrsListItems) {
+        this.attrsListItems = attrsListItems;
     }
 
-
-    //example for call from other activities
+//example for call from other activities
     //((GlobalVariables) getApplication()).setViewName("56");
     //String viewName = ((GlobalVariables) getApplication()).getViewName();
 }

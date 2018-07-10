@@ -35,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
         list_view = findViewById(R.id.attrs_list_view);
         search_text =  findViewById(R.id.search_text);
 
+        String lookupView =((GlobalVariables) getApplication()).getLookupView();
+        if(lookupView != ""){
+            search_text.setText(lookupView);
+        }
+
 
         String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews";
 
@@ -79,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 String selectedItem = (String) parent.getItemAtPosition(position);
                 search_text.setText(selectedItem);
                 ((GlobalVariables) getApplication()).setLookupView(selectedItem);
+                //clear the old attributes list
+                ((GlobalVariables) getApplication()).getAttrsListItems().clear();
             }
         });
 

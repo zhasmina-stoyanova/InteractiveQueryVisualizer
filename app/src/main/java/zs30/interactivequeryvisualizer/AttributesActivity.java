@@ -1,5 +1,7 @@
 package zs30.interactivequeryvisualizer;
 
+import android.app.Application;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -26,45 +28,50 @@ public class AttributesActivity extends AppCompatActivity {
         ListView attrsListView = findViewById(R.id.attrs_list_view);
         attrsListItems = new ArrayList<>();
 
-        //connection freeze
-        //String url = "http://10.0.2.2:8080/InteractiveQueryVisualizerWS/webapi/myresource";
-        //connection refused
-        //String url = "http://127.0.0.1:8080/InteractiveQueryVisualizerWS/webapi/myresource";
-        //connection refused
-        //String url = "http://136.168.42.16:8080/InteractiveQueryVisualizerWS/webapi/myresource";
-        //no host
-        //String url = "http://138.251.218.96:8080/InteractiveQueryVisualizerWS/webapi/myresource";
-        //connection refused
-        //String url = "http://localhost:8080/InteractiveQueryVisualizerWS/webapi/myresource";
+        //if the view hasn't been changed
+            if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
+                attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();
+            } else {
+            //connection freeze
+            //String url = "http://10.0.2.2:8080/InteractiveQueryVisualizerWS/webapi/myresource";
+            //connection refused
+            //String url = "http://127.0.0.1:8080/InteractiveQueryVisualizerWS/webapi/myresource";
+            //connection refused
+            //String url = "http://136.168.42.16:8080/InteractiveQueryVisualizerWS/webapi/myresource";
+            //no host
+            //String url = "http://138.251.218.96:8080/InteractiveQueryVisualizerWS/webapi/myresource";
+            //connection refused
+            //String url = "http://localhost:8080/InteractiveQueryVisualizerWS/webapi/myresource";
 
-        //activate tethering on phone(Samsung) or Hotspot -> USB Network and sharing(Lenovo)
-        //see the ip of the connected network(ethernet adapter 2, for example) - ipconfig, not the network and sharing center connection
-        //samsung
-        //String ip = "192.168.42.16";
-        //lenovo
-        //String ip = "192.168.42.113";
-        String lookupView =((GlobalVariables) getApplication()).getLookupView();
-        String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
+            //activate tethering on phone(Samsung) or Hotspot -> USB Network and sharing(Lenovo)
+            //see the ip of the connected network(ethernet adapter 2, for example) - ipconfig, not the network and sharing center connection
+            //samsung
+            //String ip = "192.168.42.16";
+            //lenovo
+            //String ip = "192.168.42.113";
+            String lookupView = ((GlobalVariables) getApplication()).getLookupView();
+            String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
 
-        String response = "";
-        HttpServiceRequest getRequest = new HttpServiceRequest();
-        try {
-            response = getRequest.execute(url).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            JSONArray jsonarray = new JSONArray(response);
-            for (int i = 0; i < jsonarray.length(); i++) {
-                JSONObject jsonobject = jsonarray.getJSONObject(i);
-                String name = jsonobject.getString("name");
-                attrsListItems.add(new AttributesListItem(name));
+            String response = "";
+            HttpServiceRequest getRequest = new HttpServiceRequest();
+            try {
+                response = getRequest.execute(url).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+            try {
+                JSONArray jsonarray = new JSONArray(response);
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject jsonobject = jsonarray.getJSONObject(i);
+                    String name = jsonobject.getString("name");
+                    attrsListItems.add(new AttributesListItem(name));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         adapter = new AttributesListViewAdapter(attrsListItems, getApplicationContext());
@@ -78,6 +85,31 @@ public class AttributesActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void onTableBtn(View view) {
+        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
+
+
+        //opens table page
+        Intent intent = new Intent(AttributesActivity.this, TableActivity.class);
+        startActivity(intent);
+    }
+
+    public void onFilterBtn(View view) {
+        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
+
+        //opens filter page
+        Intent intent = new Intent(AttributesActivity.this, FilterActivity.class);
+        startActivity(intent);
+    }
+
+    public void onViewsBtn(View view) {
+        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
+
+        //opens attributes page
+        Intent intent = new Intent(AttributesActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
 
