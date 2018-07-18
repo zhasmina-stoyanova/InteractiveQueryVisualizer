@@ -67,7 +67,8 @@ public class AttributesActivity extends AppCompatActivity {
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
                     String name = jsonobject.getString("name");
-                    attrsListItems.add(new AttributesListItem(name));
+                    String type = jsonobject.getString("type");
+                    attrsListItems.add(new AttributesListItem(name, type));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

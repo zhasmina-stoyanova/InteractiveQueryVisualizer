@@ -7,6 +7,8 @@ import java.util.List;
 
 public class GlobalVariables extends Application {
     private  String lookupView;
+    private String sortByAttribute;
+    private String order;
     private  List<AttributesListItem> attrsListItems = new ArrayList<AttributesListItem>();
     public static final String IP_MOBILE_DEVICE = "192.168.42.16";
 
@@ -26,7 +28,23 @@ public class GlobalVariables extends Application {
         this.attrsListItems = attrsListItems;
     }
 
-//example for call from other activities
+    public String getSortByAttribute() {
+        return sortByAttribute;
+    }
+
+    public void setSortByAttribute(String sortByAttribute) {
+        this.sortByAttribute = sortByAttribute;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    //example for call from other activities
     //((GlobalVariables) getApplication()).setViewName("56");
     //String viewName = ((GlobalVariables) getApplication()).getViewName();
 }
