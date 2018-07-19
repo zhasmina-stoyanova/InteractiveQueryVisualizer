@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_layout_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#b1b1b1"
@@ -21,7 +22,7 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ebebeb "
+            android:background="#e5e7e9"
             android:orientation="vertical"
             android:padding="20dp">
 

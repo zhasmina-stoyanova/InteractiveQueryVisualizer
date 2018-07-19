@@ -4,24 +4,49 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.ViewGroup.LayoutParams;
+
+import java.lang.reflect.Field;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText usernameView;
     private EditText passwordView;
     private TextView errorMsgLoginView;
     private final String CREDENTIALS = "zs30:zs";
+    private PopupWindow popupWindow;
+    private LinearLayout linearLayoutLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        linearLayoutLogin = (LinearLayout) findViewById(R.id.linear_layout_login);
+
+        //showing overflow menu icon for devices before 4.4
+        try {
+            ViewConfiguration config = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            if (menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        } catch (Exception ex) {
+
+        }
 
         usernameView = findViewById(R.id.username);
         passwordView = findViewById(R.id.password);
@@ -44,6 +69,37 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                //open the popup window
+                LayoutInflater layoutInflater = (LayoutInflater) LoginActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View popupView = layoutInflater.inflate(R.layout.about_popup,null);
+
+                Button closePopupBtn = (Button) popupView.findViewById(R.id.closePopupBtn);
+                popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                popupWindow.showAtLocation(linearLayoutLogin, Gravity.CENTER, 0, 0);
+
+                //close the popup
+                closePopupBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void attemptLogin() {
