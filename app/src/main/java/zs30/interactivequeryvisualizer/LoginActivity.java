@@ -1,9 +1,19 @@
 package zs30.interactivequeryvisualizer;
 
+
+
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,8 +22,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -33,6 +45,23 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        /*show logo
+        getSupportActionBar().setIcon(R.drawable.logo);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
+
+        //set custom toolbar
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        TextView view = new TextView(getApplicationContext());
+        LayoutParams lp = new RelativeLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
+        view.setText(actionBar.getTitle());
+        view.setTextColor(Color.WHITE);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(view);
 
         linearLayoutLogin = (LinearLayout) findViewById(R.id.linear_layout_login);
 

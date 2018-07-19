@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#1673B4"
+            android:background="@drawable/main_buttons"
             android:onClick="onViewsBtn"
             android:text="@string/views"
             android:textColor="#FFFFFF" />
@@ -32,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#40509D"
+            android:background="@drawable/main_buttons"
             android:onClick="onFilterBtn"
             android:text="@string/filters"
             android:textColor="#FFFFFF" />
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#6F3A8F"
+            android:background="@drawable/main_buttons"
             android:onClick="onTableBtn"
             android:text="@string/table"
             android:textColor="#FFFFFF" />
