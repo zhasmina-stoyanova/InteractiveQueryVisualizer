@@ -7,23 +7,54 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
-
+import android.widget.TextView;
+import org.florescu.android.rangeseekbar.RangeSeekBar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class FilterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private List<AttributesListItem> attrsListItems;
+    private RangeSeekBar seekBarInteger, seekBarDouble;
+    private TextView minTextInt, maxtextInt, minTextDouble, maxTextDouble;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        //seekbar for integers and double values
+        seekBarInteger = findViewById(R.id.seekbar);
+        minTextInt = findViewById(R.id.seekValuemin);
+        maxtextInt = findViewById(R.id.seekValuemax);
+        seekBarDouble = findViewById(R.id.seekbarDouble);
+        minTextDouble = findViewById(R.id.seekValueminDouble);
+        maxTextDouble = findViewById(R.id.seekValuemaxDouble);
+
+        seekBarInteger.setRangeValues(0, 30);
+        seekBarInteger.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+                minTextInt.setText("Min Value " + minValue);
+                maxtextInt.setText("Max value " + maxValue);
+            }
+        });
+
+        seekBarDouble.setRangeValues(0.0, 100.0);
+        seekBarDouble.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Double>() {
+
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Double minValue, Double maxValue) {
+                minTextDouble.setText("Min Value " + minValue);
+                maxTextDouble.setText("Max value " + maxValue);
+            }
+        });
+
+        //attributes list items
         attrsListItems = new ArrayList<>();
 
         //if the view hasn't been changed

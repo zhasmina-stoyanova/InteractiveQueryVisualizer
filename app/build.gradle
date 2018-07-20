@@ -29,4 +29,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
     implementation 'org.apache.httpcomponents:httpcore:4.4.1'
+    implementation 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
 }
