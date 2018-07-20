@@ -105,18 +105,21 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void onTableBtn(View view) {
+        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
         //opens table page
         Intent intent = new Intent(FilterActivity.this, TableActivity.class);
         startActivity(intent);
     }
 
     public void onViewsBtn(View view) {
+        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
         //opens filter page
         Intent intent = new Intent(FilterActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
     public void onAttributeBtn(View view) {
+        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
         //opens attributes page
         Intent intent = new Intent(FilterActivity.this, AttributesActivity.class);
         startActivity(intent);

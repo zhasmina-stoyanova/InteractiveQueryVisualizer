@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,7 @@ public class TableActivity extends AppCompatActivity {
 
         String lookupView = ((GlobalVariables) getApplication()).getLookupView();
         String url;
+
         if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
             List<AttributesListItem> attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();
             StringBuilder attrsList = new StringBuilder();
@@ -35,7 +37,16 @@ public class TableActivity extends AppCompatActivity {
             }
 
             attrsList = attrsList.deleteCharAt(attrsList.length() - 1);
-            url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/select?attributes=" + attrsList;
+
+            //check if filter has been set
+            String orderBy = "";
+            String sortByAttribute = ((GlobalVariables) getApplication()).getSortByAttribute();
+            String order = ((GlobalVariables) getApplication()).getOrder();
+            if(sortByAttribute != null){
+                orderBy = "&orderBy=" + sortByAttribute + ":" + order;
+            }
+
+            url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/select?attributes=" + attrsList + orderBy;
         } else {
             url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView;
         }

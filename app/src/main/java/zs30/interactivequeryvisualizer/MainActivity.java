@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
+
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.SearchView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +23,8 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity {
     private ListView list_view;
     private ArrayAdapter<String> adapter;
-    private EditText search_text;
     private final List<String> car_brands = new ArrayList<>();
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +32,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         list_view = findViewById(R.id.attrs_list_view);
-        search_text =  findViewById(R.id.search_text);
+        searchView = findViewById(R.id.searchView);
 
         String lookupView =((GlobalVariables) getApplication()).getLookupView();
         if(lookupView != ""){
-            search_text.setText(lookupView);
+           searchView.setQuery(lookupView, false);
         }
 
+        //listener for the search view
+        searchViewListener();
 
         String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews";
 
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(list_view.getContext(), R.layout.list_view, R.id.product_name, car_brands);
         list_view.setAdapter(adapter);
 
-        //set rule when the search text is on focus and when not
-        search_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        //search text on focus
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
@@ -82,34 +83,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = (String) parent.getItemAtPosition(position);
-                search_text.setText(selectedItem);
+                searchView.setQuery(selectedItem, false);
                 ((GlobalVariables) getApplication()).setLookupView(selectedItem);
                 //clear the old attributes list
                 ((GlobalVariables) getApplication()).getAttrsListItems().clear();
             }
         });
+    }
 
-        //search text
-        search_text.addTextChangedListener(new TextWatcher() {
+    private void searchViewListener() {
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                // on text changed
-                MainActivity.this.adapter.getFilter().filter(cs);
+            public boolean onQueryTextChange(String newText) {
+                MainActivity.this.adapter.getFilter().filter(newText);
+                return true;
             }
 
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-                // TODO Auto-generated method stub
-
+            public boolean onQueryTextSubmit(String query) {
+                MainActivity.this.adapter.getFilter().filter(query);
+                return true;
             }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
     }
 
     private void hideKeyboard(View view) {

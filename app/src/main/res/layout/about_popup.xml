@@ -2,17 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:gravity="center"
+    android:background="#e5e7e9"
     android:orientation="vertical"
     android:padding="20dp"
     >
-
+    <LinearLayout
+        android:id="@+id/email_login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fffffc"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:padding="20dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The project Interactive Quaery Visualizer is part of a masters dissertation in Computer Science at the University of St Andrews, Scotland.\n\nThe application allows users to quickly check data, whenever they need it. They can choose from a range of predefined views, select the needed attributes and apply additional filters to reduce the information. The result can be displayed as tabular data or through graphics."
-        android:textColor="#ffffff"
         android:textSize="16sp"/>
 
     <Button
@@ -21,5 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OK" />
+    </LinearLayout>
 
 </LinearLayout>
