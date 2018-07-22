@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 ((GlobalVariables) getApplication()).setLookupView(selectedItem);
                 //clear the old attributes list
                 ((GlobalVariables) getApplication()).getAttrsListItems().clear();
+                //clear the where clause params
+                ((GlobalVariables) getApplication()).getWhereClauseParams().clear();
             }
         });
     }

@@ -26,7 +26,8 @@
             android:name=".TableActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".FilterActivity"
-            android:label="Filter and Sort"/>
+            android:label="Filter and Sort"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".AttributesActivity"
             android:label="Choose Attrubutes"/>
         <activity

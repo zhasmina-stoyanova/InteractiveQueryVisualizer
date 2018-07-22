@@ -1,58 +1,38 @@
 package zs30.interactivequeryvisualizer;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import org.florescu.android.rangeseekbar.RangeSeekBar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class FilterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private List<AttributesListItem> attrsListItems;
-    private RangeSeekBar seekBarInteger, seekBarDouble;
-    private TextView minTextInt, maxtextInt, minTextDouble, maxTextDouble;
+    private Map<String, String> whereClauseParams = new HashMap<>();
+    private List<EditText> stringsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
-
-        //seekbar for integers and double values
-        seekBarInteger = findViewById(R.id.seekbar);
-        minTextInt = findViewById(R.id.seekValuemin);
-        maxtextInt = findViewById(R.id.seekValuemax);
-        seekBarDouble = findViewById(R.id.seekbarDouble);
-        minTextDouble = findViewById(R.id.seekValueminDouble);
-        maxTextDouble = findViewById(R.id.seekValuemaxDouble);
-
-        seekBarInteger.setRangeValues(0, 30);
-        seekBarInteger.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
-
-            @Override
-            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                minTextInt.setText("Min Value " + minValue);
-                maxtextInt.setText("Max value " + maxValue);
-            }
-        });
-
-        seekBarDouble.setRangeValues(0.0, 100.0);
-        seekBarDouble.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Double>() {
-
-            @Override
-            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Double minValue, Double maxValue) {
-                minTextDouble.setText("Min Value " + minValue);
-                maxTextDouble.setText("Max value " + maxValue);
-            }
-        });
 
         //attributes list items
         attrsListItems = new ArrayList<>();
@@ -87,7 +67,63 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
             }
         }
 
-        //spinner selected attributes
+        //initialize where clause param map
+        if (((GlobalVariables) getApplication()).getWhereClauseParams().size() > 0) {
+            whereClauseParams = ((GlobalVariables) getApplication()).getWhereClauseParams();
+        }
+
+        //the 4 types of layouts
+        LinearLayout layoutBoolean = findViewById(R.id.filter_string);
+
+        for (int i = 0; i < attrsListItems.size(); i++) {
+            String attrType = attrsListItems.get(i).getType();
+            final String attrName = attrsListItems.get(i).getAttributeName();
+            String lookupView = ((GlobalVariables) getApplication()).getLookupView();
+            String url = "";
+            if (attrType.equalsIgnoreCase("varchar")) {
+                LinearLayout parent = new LinearLayout(this);
+                parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                parent.setOrientation(LinearLayout.HORIZONTAL);
+
+                //attr name
+                TextView attributeNameTextView = new TextView(this);
+                attributeNameTextView.setText(attrName + ":");
+                attributeNameTextView.setPadding(0, 0, 10, 0);
+                attributeNameTextView.setTypeface(null, Typeface.BOLD);
+                parent.addView(attributeNameTextView);
+
+                final EditText attrValueEditText = new EditText(this);
+                attrValueEditText.setTag(attrName);
+                attrValueEditText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                //if the map has values, gets those whose attributes has where clause values
+                //and assigns it to the edit text field
+                //if the attribute is not in the map, it does not have where clause value
+                if(!whereClauseParams.isEmpty() && whereClauseParams.get(attrName) != null){
+                    String whereClauseParamsValue = whereClauseParams.get(attrName);
+                    String whereClauseParamsValueWithoutQuotations = whereClauseParamsValue.substring(1, whereClauseParamsValue.length()-1);
+                    attrValueEditText.setText(whereClauseParamsValueWithoutQuotations);
+                }
+                parent.addView(attrValueEditText);
+                stringsList.add(attrValueEditText);
+
+                //on change edit text value
+                attrValueEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {
+                        whereClauseParams.put(attrName, attrValueEditText.getText().toString());
+                    }
+
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                });
+
+                //add the linear layout with view to teh boolean liner layout
+                layoutBoolean.addView(parent);
+            }
+        }
+
+        //spinner sort by
         Spinner spinner = (Spinner) findViewById(R.id.spinnerSortByAttribute);
         spinner.setOnItemSelectedListener(this);
         //values
@@ -103,7 +139,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        //spinner selected attributes
+        //spinner order
         Spinner spinner2 = (Spinner) findViewById(R.id.spinnerOrder);
         spinner2.setOnItemSelectedListener(this);
         //values
@@ -136,6 +172,15 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void onTableBtn(View view) {
+        for(int i = 0; i < stringsList.size(); i++){
+            //single quotation marks for the string values when querying the database
+            String attr = stringsList.get(i).getTag().toString();
+            String value = stringsList.get(i).getText().toString();
+            if(!value.equals("")) {
+                whereClauseParams.put(attr,"'" + value + "'");
+            }
+        }
+        ((GlobalVariables) getApplication()).setWhereClauseParams(whereClauseParams);
         ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
         //opens table page
         Intent intent = new Intent(FilterActivity.this, TableActivity.class);

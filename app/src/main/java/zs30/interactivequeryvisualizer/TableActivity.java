@@ -2,59 +2,112 @@ package zs30.interactivequeryvisualizer;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class TableActivity extends AppCompatActivity {
+    private Map<String, String> whereClauseParams = new HashMap<>();
+    private Map<String, String> specialSymbolsURL = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
 
+        specialSymbolsURL.put("'", "%27");
+        specialSymbolsURL.put(" ", "%20");
+
         String lookupView = ((GlobalVariables) getApplication()).getLookupView();
-        String url;
+        String urlToFormat;
 
         if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
             List<AttributesListItem> attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();
+            //lists of attributes
             StringBuilder attrsList = new StringBuilder();
-            for(int i = 0; i < attrsListItems.size(); i++){
-                if(attrsListItems.get(i).isAttributeChecked()) {
-                    attrsList.append(attrsListItems.get(i).getAttributeName() + ",");
-                }
+
+            //list of where clauses params
+            boolean hasWhereClause = false;
+            StringBuilder whereClauseList = null;
+            //check if there are where clause params
+            if (((GlobalVariables) getApplication()).getWhereClauseParams().size() > 0) {
+                whereClauseList = new StringBuilder();
+                hasWhereClause = true;
+                whereClauseParams = ((GlobalVariables) getApplication()).getWhereClauseParams();
             }
 
+
+            for (int i = 0; i < attrsListItems.size(); i++) {
+                if (attrsListItems.get(i).isAttributeChecked()) {
+                    String attrName = attrsListItems.get(i).getAttributeName();
+                    attrsList.append(attrName + ",");
+
+                    //if the map has values, gets those whose attributes has where clause values
+                    //and assigns it to the edit text field
+                    //if the attribute is not in the map, it does not have where clause value
+                    if (!whereClauseParams.isEmpty() && whereClauseParams.get(attrName) != null) {
+                        String whereClauseParamsValue = whereClauseParams.get(attrName);
+                        whereClauseList.append(attrName + "=" + whereClauseParamsValue + ",");
+                    }
+                }
+            }
+            //delete the last symbol
+            if (hasWhereClause) {
+                whereClauseList = whereClauseList.deleteCharAt(whereClauseList.length() - 1);
+            }
             attrsList = attrsList.deleteCharAt(attrsList.length() - 1);
 
-            //check if filter has been set
+
+            //check if order by and sort filter has been set
             String orderBy = "";
             String sortByAttribute = ((GlobalVariables) getApplication()).getSortByAttribute();
             String order = ((GlobalVariables) getApplication()).getOrder();
-            if(sortByAttribute != null){
+            if (sortByAttribute != null) {
                 orderBy = "&orderBy=" + sortByAttribute + ":" + order;
             }
 
-            url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/select?attributes=" + attrsList + orderBy;
+            //adds where clause if exists
+            String where = "";
+            if (hasWhereClause) {
+                where = "&where=" + whereClauseList.toString();
+            }
+
+            urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/select?attributes=" + attrsList + where + orderBy;
+            //urlToFormat = "http://192.168.42.16:8080/InteractiveQueryVisualizerWS/webapi/lookupviews/film_list/select?attributes=FID,title,description,category,price,length,rating,actors&where=title=%27AFFAIR%20PREJUDICE%27";
         } else {
-            url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView;
+            urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView;
         }
+
+        //replace all special symbols in the url
+        StringBuilder strToReplace = new StringBuilder(urlToFormat.toString());
+        for (Map.Entry<String, String> entry : specialSymbolsURL.entrySet())
+        {
+            String url = "";
+            if(strToReplace.toString().contains(entry.getKey())){
+                url = strToReplace.toString().replace(entry.getKey(), entry.getValue());
+                //clear stringBuilder
+                strToReplace.setLength(0);
+                strToReplace.append(url);
+            }
+        }
+
+        String url = strToReplace.toString();
 
         String response = "";
         HttpServiceRequest getRequest = new HttpServiceRequest();
         try {
-            response = getRequest.execute(url).get();
+            response = getRequest.execute(url,toString()).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -79,18 +132,17 @@ public class TableActivity extends AppCompatActivity {
             }
 
             TableRow trHeaders = new TableRow(this);
-            trHeaders.setBackgroundColor(Color.parseColor("#1f3d7a"));
+            trHeaders.setBackgroundColor(Color.parseColor("#0066AF"));
             trHeaders.setLayoutParams(new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.FILL_PARENT,
                     TableLayout.LayoutParams.WRAP_CONTENT));
 
             for (String header : headers) {
                 TextView cell11 = new TextView(this);
-
-                cell11.setTextSize(16);
+                cell11.setTextSize(17);
                 cell11.setTypeface(null, Typeface.BOLD);
                 cell11.setText(header);
-                cell11.setPadding(5, 0, 15, 5);
+                cell11.setPadding(5, 5, 15, 5);
                 cell11.setTextColor(Color.WHITE);
                 trHeaders.addView(cell11);
             }
@@ -122,7 +174,7 @@ public class TableActivity extends AppCompatActivity {
                 if (count % 2 != 0) {
                     tr.setBackgroundColor(Color.WHITE);
                 } else {
-                    tr.setBackgroundColor(Color.parseColor("#ebf0fa"));
+                    tr.setBackgroundColor(Color.parseColor("#EFEFEF"));
                 }
 
                 tr.setLayoutParams(new TableLayout.LayoutParams(
@@ -134,6 +186,7 @@ public class TableActivity extends AppCompatActivity {
                     TextView cell11 = new TextView(this);
 
                     cell11.setText(attr);
+                    cell11.setTextSize(16);
                     cell11.setPadding(5, 0, 15, 5);
                     tr.addView(cell11);
                 }

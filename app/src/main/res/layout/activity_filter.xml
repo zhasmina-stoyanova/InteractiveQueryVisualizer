@@ -6,185 +6,272 @@
     android:layout_height="match_parent"
     tools:context="zs30.interactivequeryvisualizer.FilterActivity">
 
-        <ScrollView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/buttons">
+
+        <LinearLayout
+            android:id="@+id/filters"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/buttons">
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:id="@+id/filter_string"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="In string view" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/filter_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="In numbers view" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/filter_boolean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/filter_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="In dates view" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingRight="8dp"
+                    android:text="Attribute1" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/linearLayout1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:background="#f2f2f2"
+                    android:visibility="gone">
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/editText1"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sort by:"
-                        android:textSize="16dip" />
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="Search text  ..."
+                        android:paddingLeft="8dp" />
 
-                    <Spinner
-                        android:id="@+id/spinnerSortByAttribute"
+                    <Button
+                        android:id="@+id/home_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dip" />
-
+                        android:layout_height="40dp"
+                        android:background="@drawable/main_buttons"
+                        android:text="Seach"
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Order:"
-                        android:textSize="16dip" />
-
-                    <Spinner
-                        android:id="@+id/spinnerOrder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dip" />
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/integer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/textInteger"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Range Set Integer values"
-                        android:textSize="22dp" />
-
-                    <TextView
-                        android:id="@+id/seekValuemin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/textInteger"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="15dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="10dp"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/seekValuemax"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/textInteger"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="15dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="10dp"
-                        android:textColor="#000000" />
-
-                    <org.florescu.android.rangeseekbar.RangeSeekBar
-                        android:id="@+id/seekbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/seekValuemin"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="20dp"
-                        rsb:absoluteMaxValue="30"
-                        rsb:absoluteMinValue="0"
-                        rsb:thumbDisabled="@drawable/seek_thumb_disabled"
-                        rsb:thumbNormal="@drawable/seek_thumb_normal"
-                        rsb:thumbPressed="@drawable/seek_thumb_pressed"
-                        rsb:thumbShadow="true"
-                        rsb:thumbShadowBlur="3dp"
-                        rsb:thumbShadowColor="@color/primary_material_light"
-                        rsb:thumbShadowXOffset="1dp"
-                        rsb:thumbShadowYOffset="2dp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/integer"
-                    android:layout_marginTop="20dp">
-
-                    <TextView
-                        android:id="@+id/text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Range Set Double values"
-                        android:textSize="22dp" />
-
-                    <TextView
-                        android:id="@+id/seekValueminDouble"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/text"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="15dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="10dp"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/seekValuemaxDouble"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/text"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="15dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="10dp"
-                        android:textColor="#000000" />
-
-                    <org.florescu.android.rangeseekbar.RangeSeekBar
-                        android:id="@+id/seekbarDouble"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/seekValueminDouble"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="20dp"
-                        rsb:absoluteMaxValue="30"
-                        rsb:absoluteMinValue="0"
-                        rsb:thumbDisabled="@drawable/seek_thumb_disabled"
-                        rsb:thumbNormal="@drawable/seek_thumb_normal"
-                        rsb:thumbPressed="@drawable/seek_thumb_pressed"
-                        rsb:thumbShadow="true"
-                        rsb:thumbShadowBlur="3dp"
-                        rsb:thumbShadowColor="@color/primary_material_light"
-                        rsb:thumbShadowXOffset="1dp"
-                        rsb:thumbShadowYOffset="2dp" />
-
-                </RelativeLayout>
             </LinearLayout>
-        </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sort by:"
+                    android:textSize="16dip" />
+
+                <Spinner
+                    android:id="@+id/spinnerSortByAttribute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dip" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Order:"
+                    android:textSize="16dip" />
+
+                <Spinner
+                    android:id="@+id/spinnerOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dip" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/integer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/textInteger"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Range Set Integer values"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/seekValuemin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textInteger"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="10dp"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/seekValuemax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textInteger"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="10dp"
+                    android:textColor="#000000" />
+
+                <org.florescu.android.rangeseekbar.RangeSeekBar
+                    android:id="@+id/seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/seekValuemin"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="20dp"
+                    rsb:absoluteMaxValue="30"
+                    rsb:absoluteMinValue="0"
+                    rsb:thumbDisabled="@drawable/seek_thumb_disabled"
+                    rsb:thumbNormal="@drawable/seek_thumb_normal"
+                    rsb:thumbPressed="@drawable/seek_thumb_pressed"
+                    rsb:thumbShadow="true"
+                    rsb:thumbShadowBlur="3dp"
+                    rsb:thumbShadowColor="@color/primary_material_light"
+                    rsb:thumbShadowXOffset="1dp"
+                    rsb:thumbShadowYOffset="2dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/integer"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Range Set Double values"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/seekValueminDouble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="10dp"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/seekValuemaxDouble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/text"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="10dp"
+                    android:textColor="#000000" />
+
+                <org.florescu.android.rangeseekbar.RangeSeekBar
+                    android:id="@+id/seekbarDouble"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/seekValueminDouble"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="20dp"
+                    rsb:absoluteMaxValue="30"
+                    rsb:absoluteMinValue="0"
+                    rsb:thumbDisabled="@drawable/seek_thumb_disabled"
+                    rsb:thumbNormal="@drawable/seek_thumb_normal"
+                    rsb:thumbPressed="@drawable/seek_thumb_pressed"
+                    rsb:thumbShadow="true"
+                    rsb:thumbShadowBlur="3dp"
+                    rsb:thumbShadowColor="@color/primary_material_light"
+                    rsb:thumbShadowXOffset="1dp"
+                    rsb:thumbShadowYOffset="2dp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="0dp"
-        android:orientation="horizontal"
-        android:padding="0dp">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button2"
