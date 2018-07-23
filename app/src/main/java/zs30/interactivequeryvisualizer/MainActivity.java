@@ -11,19 +11,22 @@ import android.widget.ListView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SearchView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private ListView list_view;
-    private ArrayAdapter<String> adapter;
-    private final List<String> car_brands = new ArrayList<>();
+    private SimpleAdapter adapter;
     private SearchView searchView;
 
     @Override
@@ -54,19 +57,45 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        final ArrayList<Map<String,Object>> itemDataList = new ArrayList<Map<String,Object>>();;
+
         try {
             JSONArray jsonarray = new JSONArray(response);
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
+
+                //values for the list view
                 String name = jsonobject.getString("name");
-                car_brands.add(name);
+                String description = jsonobject.getString("description");
+
+                Map<String,Object> listItemMap = new HashMap<String,Object>();
+                listItemMap.put("name", name);
+                listItemMap.put("description", description);
+                itemDataList.add(listItemMap);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        adapter = new ArrayAdapter<>(list_view.getContext(), R.layout.list_view, R.id.product_name, car_brands);
+        //simple adapter
+        adapter = new SimpleAdapter(this,itemDataList,R.layout.list_view,
+                new String[]{"name","description"},new int[]{R.id.name,R.id.description});
+
         list_view.setAdapter(adapter);
+
+        //list item on click listener
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
+                String selectedName = itemDataList.get(index).get("name").toString();;
+                searchView.setQuery(selectedName, false);
+                ((GlobalVariables) getApplication()).setLookupView(selectedName);
+                //clear the old attributes list
+                ((GlobalVariables) getApplication()).getAttrsListItems().clear();
+                //clear the where clause params
+                ((GlobalVariables) getApplication()).getWhereClauseParams().clear();
+            }
+        });
 
         //search text on focus
         searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -75,20 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     hideKeyboard(v);
                 }
-            }
-        });
-
-        // OnItemClickListener for list_view
-        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) parent.getItemAtPosition(position);
-                searchView.setQuery(selectedItem, false);
-                ((GlobalVariables) getApplication()).setLookupView(selectedItem);
-                //clear the old attributes list
-                ((GlobalVariables) getApplication()).getAttrsListItems().clear();
-                //clear the where clause params
-                ((GlobalVariables) getApplication()).getWhereClauseParams().clear();
             }
         });
     }

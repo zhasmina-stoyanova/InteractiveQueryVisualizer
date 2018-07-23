@@ -19,15 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
+            android:paddingBottom="3dp"
             android:background="#e5e7e9"
             android:iconifiedByDefault="false"
             android:queryHint="Search..."
             />
         <ListView
             android:background="#ffffff"
+            android:layout_height="wrap_content"
             android:id="@+id/attrs_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent" />
     </LinearLayout>
 
     <LinearLayout
