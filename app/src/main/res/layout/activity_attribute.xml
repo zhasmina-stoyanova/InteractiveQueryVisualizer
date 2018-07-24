@@ -9,6 +9,7 @@
         android:id="@+id/attrs_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_above="@id/buttons"
         />
     <LinearLayout
@@ -28,6 +29,15 @@
             android:background="@drawable/main_buttons"
             android:onClick="onViewsBtn"
             android:text="@string/views"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_button_in_menu"
+            android:text="@string/attributes"
             android:textColor="#FFFFFF" />
 
         <Button

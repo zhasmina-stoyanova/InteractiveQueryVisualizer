@@ -28,6 +28,8 @@ public class AttributesActivity extends AppCompatActivity {
         ListView attrsListView = findViewById(R.id.attrs_list_view);
         attrsListItems = new ArrayList<>();
 
+        getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
+
         //if the view hasn't been changed
             if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
                 attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();

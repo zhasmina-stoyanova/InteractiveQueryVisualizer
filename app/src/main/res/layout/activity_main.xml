@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="zs30.interactivequeryvisualizer.MainActivity">
 
     <LinearLayout
@@ -39,6 +38,15 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_button_in_menu"
+            android:text="Views"
+            android:textColor="#FFFFFF"/>
+
+        <Button
             android:id="@+id/button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -46,7 +54,7 @@
             android:background="@drawable/main_buttons"
             android:onClick="onAttributeBtn"
             android:text="@string/attributes"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"/>
 
         <Button
             android:id="@+id/button2"
@@ -55,8 +63,8 @@
             android:layout_weight="1"
             android:background="@drawable/main_buttons"
             android:onClick="onFilterBtn"
-            android:text="@string/filters"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:text="@string/filters" />
 
         <Button
             android:id="@+id/button3"
@@ -65,7 +73,7 @@
             android:layout_weight="1"
             android:background="@drawable/main_buttons"
             android:onClick="onTableBtn"
-            android:text="@string/table"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:text="@string/table" />
     </LinearLayout>
 </RelativeLayout>

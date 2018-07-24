@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Interactive Query Visualizer</string>
     <string name="search">Search view...</string>
-    <string name="attributes">Attributes</string>
+    <string name="attributes">Attrs</string>
     <string name="filters">Filters</string>
     <string name="table">Table</string>
     <string name="views">Views</string>
