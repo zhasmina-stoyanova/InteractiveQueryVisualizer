@@ -27,7 +27,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="10dp"
-                android:text="Set string values"
+                android:text="Set single values"
                 android:visibility="gone"
                 android:textSize="18dp" />
 
@@ -47,7 +47,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="10dp"
-                android:text="Set range number values"
+                android:text="Set range numeric values"
                 android:visibility="gone"
                 android:textSize="18dp" />
 

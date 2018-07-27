@@ -15,24 +15,30 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".TableActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FilterActivity"
+            android:label="Table results" />
+        <activity
+            android:name=".FilterActivity"
             android:label="Filter and Sort"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".AttributesActivity"
-            android:label="Choose Attrubutes"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AttributesActivity"
+            android:label="Choose Attrubutes" />
         <activity
             android:name=".MainActivity"
-            android:label="Choose View"></activity>
+            android:label="Choose View" />
+        <activity android:name=".AttributesGraphicsActivity" />
+        <activity android:name=".GraphicsActivity"></activity>
     </application>
 
 </manifest>

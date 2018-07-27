@@ -5,20 +5,20 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -41,11 +41,34 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     private List<EditText> stringsList = new ArrayList<>();
     private List<RadioGroup> booleansList = new ArrayList<>();
     private List<RangeSeekBar> numberRangeList = new ArrayList<>();
+    private Map<String, String> dataTypeCategories = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        //datatype categories
+        //single values categories
+        dataTypeCategories.put("varchar", "single");
+        dataTypeCategories.put("char", "single");
+        dataTypeCategories.put("tinytext", "single");
+        dataTypeCategories.put("text", "single");
+        dataTypeCategories.put("mediumtext", "single");
+        //very large text
+        dataTypeCategories.put("longtext", "single");
+        dataTypeCategories.put("varchar", "single");
+        dataTypeCategories.put("binary", "single");
+        dataTypeCategories.put("varbinary", "single");
+        //must be different category
+        dataTypeCategories.put("enum", "single");
+        dataTypeCategories.put("smallint", "single");
+        dataTypeCategories.put("mediumint", "single");
+        dataTypeCategories.put("bigint", "single");
+        dataTypeCategories.put("int", "single");
+        //numeric range
+        dataTypeCategories.put("double", "numeric_range");
+        dataTypeCategories.put("decimal", "numeric_range");
 
         getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
 
@@ -97,7 +120,10 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
             final String attrName = attrsListItems.get(i).getAttributeName();
             String lookupView = ((GlobalVariables) getApplication()).getLookupView();
             String url = "";
-            if (attrType.equalsIgnoreCase("varchar")) {
+
+            String category = dataTypeCategories.get(attrType) != null ? dataTypeCategories.get(attrType) : attrType;
+
+            if (category.equalsIgnoreCase("single")) {
                 TextView panelLabel = findViewById(R.id.text_string);
                 panelLabel.setVisibility(View.VISIBLE);
                 LinearLayout parent = new LinearLayout(this);
@@ -120,12 +146,8 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                 //if the attribute is not in the map, it does not have where clause value
                 if (!whereClauseParams.isEmpty() && whereClauseParams.get(attrName) != null) {
                     String whereClauseParamsValue = whereClauseParams.get(attrName);
-                    if(!whereClauseParamsValue.equals("")){
-                        String whereClauseParamsValueWithoutQuotations = whereClauseParamsValue.substring(1, whereClauseParamsValue.length() - 1);
-                        attrValueEditText.setText(whereClauseParamsValueWithoutQuotations);
-                    }else{
-                        attrValueEditText.setText(whereClauseParamsValue);
-                    }
+                    String whereClauseParamsValueWithoutQuotations = whereClauseParamsValue.substring(1, whereClauseParamsValue.length() - 1);
+                    attrValueEditText.setText(whereClauseParamsValueWithoutQuotations);
                 }
                 titleWrapper.addView(attrValueEditText);
                 stringsList.add(attrValueEditText);
@@ -229,7 +251,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                 //add the linear layout with view to the boolean liner layout
                 layoutBoolean.addView(parent);
 
-            } else if (attrType.equalsIgnoreCase("decimal")) {
+            } else if (category.equalsIgnoreCase("numeric_range")) {
                 TextView panelLabel = findViewById(R.id.text_number);
                 panelLabel.setVisibility(View.VISIBLE);
                 String min = "";
@@ -273,7 +295,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                 seekBar.setTag(attrName);
 
                 //table layout for min max labels and values
-                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1.0f);
+                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f);
                 TableLayout tableLayout = new TableLayout(this);
 
                 TableRow tableRow = new TableRow(this);
@@ -284,7 +306,8 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                 TextView minLabel = new TextView(this);
                 minLabel.setText("min");
                 minLabel.setPadding(0, 0, 10, 0);
-                minLabel.setTypeface(null, Typeface.BOLD);;
+                minLabel.setTypeface(null, Typeface.BOLD);
+                ;
                 minLabel.setLayoutParams(textViewParam);
                 minLabel.setGravity(Gravity.LEFT);
 
@@ -333,7 +356,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                 //if the map has values, gets those whose attributes that have where clause values
                 //and assigns it to the min and max values in range number seekbar
                 //if the attribute is not in the map, it does not have where clause value set
-                if(!whereClauseParams.isEmpty() && whereClauseParams.get(attrName) != null){
+                if (!whereClauseParams.isEmpty() && whereClauseParams.get(attrName) != null) {
                     String whereClauseParamsValue = whereClauseParams.get(attrName);
                     //the values of min and max are concatenated by ;
                     String[] parts = whereClauseParamsValue.split(";");
@@ -390,18 +413,24 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        Spinner spinner = (Spinner) parent;
-        if (spinner.getId() == R.id.spinnerSortByAttribute) {
-            String item = parent.getItemAtPosition(position).toString();
-            ((GlobalVariables) getApplication()).setSortByAttribute(item);
-            //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-        } else if (spinner.getId() == R.id.spinnerOrder) {
-            String item = parent.getItemAtPosition(position).toString();
-            ((GlobalVariables) getApplication()).setOrder(item);
-            //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_menu, menu);
+        return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
@@ -416,7 +445,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
             String value = stringsList.get(i).getText().toString();
             if (!value.equals("")) {
                 whereClauseParams.put(attr, "'" + value + "'");
-            }else{
+            } else {
                 //if we have attribute and the value is set after the first time to ""
                 whereClauseParams.remove(attr);
             }
@@ -464,7 +493,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
             String value = stringsList.get(i).getText().toString();
             if (!value.equals("")) {
                 whereClauseParams.put(attr, "'" + value + "'");
-            }else{
+            } else {
                 //if we have attribute and the value is set after the first time to ""
                 whereClauseParams.remove(attr);
             }
@@ -512,7 +541,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
             String value = stringsList.get(i).getText().toString();
             if (!value.equals("")) {
                 whereClauseParams.put(attr, "'" + value + "'");
-            }else{
+            } else {
                 //if we have attribute and the value is set after the first time to ""
                 whereClauseParams.remove(attr);
             }

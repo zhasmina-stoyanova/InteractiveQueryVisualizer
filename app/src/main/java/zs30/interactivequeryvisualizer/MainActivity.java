@@ -1,38 +1,73 @@
 package zs30.interactivequeryvisualizer;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.SwitchCompat;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private ListView list_view;
     private SimpleAdapter adapter;
     private SearchView searchView;
+    SwitchCompat mainSwitchOnOffSw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
+       // getSupportActionBar().setCustomView(R.layout.switch_layout);
+       // getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
+
+       // Switch button = findViewById(R.id.actionbar_switch);
+       // button.setOnCheckedChangeListener(this);
+
+        //SwitchCompat button = findViewById(R.id.switchButton);
+
 
         list_view = findViewById(R.id.attrs_list_view);
         searchView = findViewById(R.id.searchView);
@@ -108,6 +143,49 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isChecked = false;
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //menu.findItem(R.id.sort_by_name).setChecked(true);
+        switch (item.getItemId()) {
+            case R.id.switchButton:
+                isChecked = !item.isChecked();
+                //item.setTitle("some");
+                if(isChecked){
+                    item.setIcon(R.drawable.toggle_right);
+                }else{
+                    item.setIcon(R.drawable.toggle_left);
+                }
+                item.setChecked(isChecked);
+
+                return true;
+            default:
+                item.setIcon(R.drawable.seek_thumb_disabled);
+                return false;
+      }
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.graphics_switch) {
+                View view = MenuItemCompat.getActionView(item);
+                if (view != null) {
+                    mainSwitchOnOffSw = view.findViewById(R.id.switchButton);
+                    mainSwitchOnOffSw.setOnCheckedChangeListener(this);
+                }
+            }
+        }
+
+        return true;
+    }
     private void searchViewListener() {
         SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
@@ -147,5 +225,11 @@ public class MainActivity extends AppCompatActivity {
         //opens attributes page
         Intent intent = new Intent(MainActivity.this, AttributesActivity.class);
         startActivity(intent);
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            Toast.makeText(MainActivity.this, String.valueOf(isChecked), Toast.LENGTH_SHORT).show();
     }
 }
