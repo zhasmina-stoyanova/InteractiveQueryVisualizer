@@ -13,4 +13,10 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_field_required">This field is required</string>
+    <string name="Graphics">GRF</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="graphics_array">
+        <item>Bar Chart</item>
+        <item>Line Graph</item>
+    </string-array>
 </resources>

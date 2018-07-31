@@ -1,9 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AttributesGraphicsActivity">
+    tools:context="zs30.interactivequeryvisualizer.AttributesGraphicsActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dip"
+            android:text="Select Attribute 1" />
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dip"
+            android:text="Select Attribute 2" />
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dip"
+            android:text="Graphics Type" />
+
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/graphics_array" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="0dp"
+        android:orientation="horizontal"
+        android:padding="0dp">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_buttons"
+            android:onClick="onViewsBtn"
+            android:text="@string/views"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_button_in_menu"
+            android:text="@string/attributes"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_buttons"
+            android:onClick="onFilterBtn"
+            android:text="@string/filters"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_buttons"
+            android:onClick="onGraphicsBtn"
+            android:text="@string/Graphics"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</RelativeLayout>

@@ -170,7 +170,7 @@
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/button_attr_table"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -178,6 +178,15 @@
             android:onClick="onAttributeBtn"
             android:text="@string/attributes"
             android:textColor="#FFFFFF" />
+        <Button
+            android:id="@+id/button_attr_graphics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_buttons"
+            android:onClick="onAttributeGraphicsBtn"
+            android:text="AttrG"
+            android:textColor="#FFFFFF"/>
 
         <Button
             android:id="@+id/button4"
@@ -189,7 +198,7 @@
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/button_table"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -197,5 +206,14 @@
             android:onClick="onTableBtn"
             android:text="@string/table"
             android:textColor="#FFFFFF" />
+        <Button
+            android:id="@+id/button_graphics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_buttons"
+            android:onClick="onGraphicsBtn"
+            android:textColor="#FFFFFF"
+            android:text="@string/Graphics" />
     </LinearLayout>
 </RelativeLayout>

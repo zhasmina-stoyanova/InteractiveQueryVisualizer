@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         guestButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((GlobalVariables) getApplication()).setGraphicsBtnOn(false);
                 //opens views page
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -152,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
         String[] pieces = CREDENTIALS.split(":");
 
         if (pieces[0].equals(username) && pieces[1].equals(password) ) {
+            ((GlobalVariables) getApplication()).setGraphicsBtnOn(false);
             //opens views page
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);

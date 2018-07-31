@@ -14,7 +14,7 @@
     </style>
 
     <style name="SwitchGraphicsTheme" parent="Theme.AppCompat.Light">
-        <item name="colorControlActivated">#00e600</item>
+        <item name="colorControlActivated">#7fffd4</item>
         <item name="colorSwitchThumbNormal">#A8A8A8</item>
     </style>
 

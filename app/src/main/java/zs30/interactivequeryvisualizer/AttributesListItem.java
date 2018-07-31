@@ -36,4 +36,10 @@ public class AttributesListItem {
     public void setType(String type) {
         this.type = type;
     }
+
+    //for the spinner when choosing graphics attributes
+    @Override
+    public String toString() {
+        return this.attributeName;
+    }
 }

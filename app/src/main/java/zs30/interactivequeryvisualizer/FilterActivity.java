@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -42,11 +43,35 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     private List<RadioGroup> booleansList = new ArrayList<>();
     private List<RangeSeekBar> numberRangeList = new ArrayList<>();
     private Map<String, String> dataTypeCategories = new HashMap<>();
+    private Button buttonAtrrsGraphics;
+    private Button buttonGraphics;
+    private Button buttonAttrsTable;
+    private Button buttonTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        buttonAtrrsGraphics = findViewById(R.id.button_attr_graphics);
+        buttonGraphics = findViewById(R.id.button_graphics);
+        buttonAttrsTable = findViewById(R.id.button_attr_table);
+        buttonTable = findViewById(R.id.button_table);
+
+        //check if graphics is on
+        //if on hide attr table and table buttons
+        //and show attr graphics and graphics buttons
+        if (((GlobalVariables) getApplication()).isGraphicsBtnOn()) {
+            buttonAtrrsGraphics.setVisibility(View.VISIBLE);
+            buttonGraphics.setVisibility(View.VISIBLE);
+            buttonAttrsTable.setVisibility(View.GONE);
+            buttonTable.setVisibility(View.GONE);
+        } else {
+            buttonAtrrsGraphics.setVisibility(View.GONE);
+            buttonGraphics.setVisibility(View.GONE);
+            buttonAttrsTable.setVisibility(View.VISIBLE);
+            buttonTable.setVisibility(View.VISIBLE);
+        }
 
         //datatype categories
         //single values categories
@@ -57,7 +82,6 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
         dataTypeCategories.put("mediumtext", "single");
         //very large text
         dataTypeCategories.put("longtext", "single");
-        dataTypeCategories.put("varchar", "single");
         dataTypeCategories.put("binary", "single");
         dataTypeCategories.put("varbinary", "single");
         //must be different category
@@ -69,6 +93,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
         //numeric range
         dataTypeCategories.put("double", "numeric_range");
         dataTypeCategories.put("decimal", "numeric_range");
+        // TODO add date to categories
 
         getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
 
@@ -431,109 +456,57 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner spinner = (Spinner) parent;
+        if (spinner.getId() == R.id.spinnerSortByAttribute) {
+            String item = parent.getItemAtPosition(position).toString();
+            ((GlobalVariables) getApplication()).setSortByAttribute(item);
+            //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+        } else if (spinner.getId() == R.id.spinnerOrder) {
+            String item = parent.getItemAtPosition(position).toString();
+            ((GlobalVariables) getApplication()).setOrder(item);
+            //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
     }
 
     public void onTableBtn(View view) {
-        //get values for strings
-        for (int i = 0; i < stringsList.size(); i++) {
-            //single quotation marks for the string values when querying the database
-            String attr = stringsList.get(i).getTag().toString();
-            String value = stringsList.get(i).getText().toString();
-            if (!value.equals("")) {
-                whereClauseParams.put(attr, "'" + value + "'");
-            } else {
-                //if we have attribute and the value is set after the first time to ""
-                whereClauseParams.remove(attr);
-            }
-        }
-
-        //get values for booleans
-        for (int i = 0; i < booleansList.size(); i++) {
-            String attr = booleansList.get(i).getTag().toString();
-            int checkedRadioBtnId = booleansList.get(i).getCheckedRadioButtonId();
-
-            RadioButton selectedRadioButton = (RadioButton) findViewById(checkedRadioBtnId);
-            String value = selectedRadioButton.getText().toString();
-
-            if (!value.equals("") && !value.equals("All")) {
-                whereClauseParams.put(attr, value);
-            }
-        }
-
-        //get values for number range
-        for (int i = 0; i < numberRangeList.size(); i++) {
-            String attr = numberRangeList.get(i).getTag().toString();
-            Number minValue = numberRangeList.get(i).getSelectedMinValue();
-            Number maxValue = numberRangeList.get(i).getSelectedMaxValue();
-
-            //concatenate min and max values with ;
-            String value = minValue + ";" + maxValue;
-
-            if (!value.equals("")) {
-                whereClauseParams.put(attr, value);
-            }
-        }
-
-        ((GlobalVariables) getApplication()).setWhereClauseParams(whereClauseParams);
-        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
+        setGlobalWhereClauseParamsAndAttributesList();
         //opens table page
         Intent intent = new Intent(FilterActivity.this, TableActivity.class);
         startActivity(intent);
     }
 
     public void onViewsBtn(View view) {
-        //get values for strings
-        for (int i = 0; i < stringsList.size(); i++) {
-            //single quotation marks for the string values when querying the database
-            String attr = stringsList.get(i).getTag().toString();
-            String value = stringsList.get(i).getText().toString();
-            if (!value.equals("")) {
-                whereClauseParams.put(attr, "'" + value + "'");
-            } else {
-                //if we have attribute and the value is set after the first time to ""
-                whereClauseParams.remove(attr);
-            }
-        }
-
-        //get values for booleans
-        for (int i = 0; i < booleansList.size(); i++) {
-            String attr = booleansList.get(i).getTag().toString();
-            int checkedRadioBtnId = booleansList.get(i).getCheckedRadioButtonId();
-
-            RadioButton selectedRadioButton = (RadioButton) findViewById(checkedRadioBtnId);
-            String value = selectedRadioButton.getText().toString();
-
-            if (!value.equals("") && !value.equals("All")) {
-                whereClauseParams.put(attr, value);
-            }
-        }
-
-        //get values for number range
-        for (int i = 0; i < numberRangeList.size(); i++) {
-            String attr = numberRangeList.get(i).getTag().toString();
-            Number minValue = numberRangeList.get(i).getSelectedMinValue();
-            Number maxValue = numberRangeList.get(i).getSelectedMaxValue();
-
-            //concatenate min and max values with ;
-            String value = minValue + ";" + maxValue;
-
-            if (!value.equals("")) {
-                whereClauseParams.put(attr, value);
-            }
-        }
-
-        ((GlobalVariables) getApplication()).setWhereClauseParams(whereClauseParams);
-        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
+        setGlobalWhereClauseParamsAndAttributesList();
         //opens filter page
         Intent intent = new Intent(FilterActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
     public void onAttributeBtn(View view) {
+        setGlobalWhereClauseParamsAndAttributesList();
+        //opens attributes page
+        Intent intent = new Intent(FilterActivity.this, AttributesActivity.class);
+        startActivity(intent);
+    }
+
+    public void onAttributeGraphicsBtn(View view) {
+        setGlobalWhereClauseParamsAndAttributesList();
+        //opens graphics attributes page
+        Intent intent = new Intent(FilterActivity.this, AttributesGraphicsActivity.class);
+        startActivity(intent);
+    }
+
+    public void onGraphicsBtn(View view) {
+        setGlobalWhereClauseParamsAndAttributesList();
+        //opens graphics page
+        Intent intent = new Intent(FilterActivity.this, GraphicsActivity.class);
+        startActivity(intent);
+    }
+
+    public void setGlobalWhereClauseParamsAndAttributesList() {
         //get values for strings
         for (int i = 0; i < stringsList.size(); i++) {
             //single quotation marks for the string values when querying the database
@@ -576,9 +549,6 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
 
         ((GlobalVariables) getApplication()).setWhereClauseParams(whereClauseParams);
         ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
-        //opens attributes page
-        Intent intent = new Intent(FilterActivity.this, AttributesActivity.class);
-        startActivity(intent);
     }
 }
 

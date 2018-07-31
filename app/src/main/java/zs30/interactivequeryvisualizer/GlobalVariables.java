@@ -14,6 +14,12 @@ public class GlobalVariables extends Application {
     private  List<AttributesListItem> attrsListItems = new ArrayList<AttributesListItem>();
     public static final String IP_MOBILE_DEVICE = "192.168.42.16";
     private Map<String, String> whereClauseParams = new HashMap<>();
+    private boolean graphicsBtnOn = false;
+    private String graphicsXAxisAttr;
+    private String graphicsYAxisAttr;
+    private String graphicsXAxisAttrType;
+    private String graphicsYAxisAttrType;
+    private String graphicsType;
 
     public String getLookupView() {
         return lookupView;
@@ -55,6 +61,53 @@ public class GlobalVariables extends Application {
         this.whereClauseParams = whereClauseParams;
     }
 
+    public boolean isGraphicsBtnOn() {
+        return graphicsBtnOn;
+    }
+
+    public void setGraphicsBtnOn(boolean graphicsBtnOn) {
+        this.graphicsBtnOn = graphicsBtnOn;
+    }
+
+    public String getGraphicsXAxisAttr() {
+        return graphicsXAxisAttr;
+    }
+
+    public void setGraphicsXAxisAttr(String graphicsXAxisAttr) {
+        this.graphicsXAxisAttr = graphicsXAxisAttr;
+    }
+
+    public String getGraphicsYAxisAttr() {
+        return graphicsYAxisAttr;
+    }
+
+    public void setGraphicsYAxisAttr(String graphicsYAxisAttr) {
+        this.graphicsYAxisAttr = graphicsYAxisAttr;
+    }
+
+    public String getGraphicsType() {
+        return graphicsType;
+    }
+
+    public void setGraphicsType(String graphicsType) {
+        this.graphicsType = graphicsType;
+    }
+
+    public String getGraphicsXAxisAttrType() {
+        return graphicsXAxisAttrType;
+    }
+
+    public void setGraphicsXAxisAttrType(String graphicsXAxisAttrType) {
+        this.graphicsXAxisAttrType = graphicsXAxisAttrType;
+    }
+
+    public String getGraphicsYAxisAttrType() {
+        return graphicsYAxisAttrType;
+    }
+
+    public void setGraphicsYAxisAttrType(String graphicsYAxisAttrType) {
+        this.graphicsYAxisAttrType = graphicsYAxisAttrType;
+    }
 
     //example for call from other activities
     //((GlobalVariables) getApplication()).setViewName("56");
