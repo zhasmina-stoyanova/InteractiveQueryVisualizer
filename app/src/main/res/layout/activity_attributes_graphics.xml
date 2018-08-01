@@ -14,22 +14,36 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="8dip"
+            android:textSize="18dp"
+            android:background="#e5e7e9"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="10dp"
             android:text="Select Attribute 1" />
 
         <Spinner
             android:id="@+id/spinner1"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="8dip"
+            android:textSize="18dp"
+            android:background="#e5e7e9"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="10dp"
             android:text="Select Attribute 2" />
 
         <Spinner
             android:id="@+id/spinner2"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 
@@ -42,11 +56,18 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="8dip"
+            android:textSize="18dp"
+            android:background="#e5e7e9"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="10dp"
             android:text="Graphics Type" />
 
         <Spinner
             android:id="@+id/spinner3"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:entries="@array/graphics_array" />

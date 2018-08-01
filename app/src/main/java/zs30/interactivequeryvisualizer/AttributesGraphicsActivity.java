@@ -107,11 +107,26 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        AttributesListItem spinner1SelectedItem = (AttributesListItem) ((Spinner) findViewById(R.id.spinner1)).getSelectedItem();
+        switch (parent.getId()){
+            case R.id.spinner1:
+                AttributesListItem spinner1SelectedItem = (AttributesListItem) ((Spinner) findViewById(R.id.spinner1)).getSelectedItem();
 
-        String typeAttr1 = spinner1SelectedItem.getType();
-        String categoryAttr1 = dataTypeCategories.get(typeAttr1);
+                String typeAttr1 = spinner1SelectedItem.getType();
+                String categoryAttr1 = dataTypeCategories.get(typeAttr1);
+                //st_firstSpinnerSelectedItem = firstList.get(position).getName();
+                //st_firstSpinnerSelectedItemID = firstList.get(position).getFirstItemId();
+                //setSecondSpinner(st_firstSpinnerSelectedItemID);
+                initializeSpinner2(categoryAttr1);
+                break;
+            case R.id.spinner2:
+                //st_secondSpinnerSelectedItem = secondList.get(position).getName();
+                //st_secondSpinnerSelectedItemID = secondList.get(position).getId();
+                break;
+        }
 
+    }
+
+    public void initializeSpinner2(String categoryAttr1){
         List<AttributesListItem> list = new ArrayList<>();
         for (int i = 0; i < attrsListItems.size(); i++) {
             String name = attrsListItems.get(i).getAttributeName();

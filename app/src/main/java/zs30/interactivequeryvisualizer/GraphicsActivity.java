@@ -2,6 +2,8 @@ package zs30.interactivequeryvisualizer;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -36,6 +38,7 @@ public class GraphicsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphics);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
         String graphicsXAxisAttr = ((GlobalVariables) getApplication()).getGraphicsXAxisAttr();
         String graphicsYAxisAttr = ((GlobalVariables) getApplication()).getGraphicsYAxisAttr();
@@ -207,5 +210,22 @@ public class GraphicsActivity extends AppCompatActivity {
         lineGraph.setData(dataLineGraph);
         lineGraph.setDescription(((GlobalVariables) getApplication()).getLookupView()); // set the description
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // the back button in the action bar
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_menu, menu);
+        return true;
     }
 }
