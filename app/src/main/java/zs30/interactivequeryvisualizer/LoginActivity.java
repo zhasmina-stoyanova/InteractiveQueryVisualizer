@@ -31,13 +31,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText usernameView;
     private EditText passwordView;
     private TextView errorMsgLoginView;
-    private final String CREDENTIALS = "zs30:zs";
+    private final String CREDENTIALS = "mina:mina";
     private PopupWindow popupWindow;
     private LinearLayout linearLayoutLogin;
 
@@ -150,9 +158,22 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        String[] pieces = CREDENTIALS.split(":");
+        String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/authentication";
 
-        if (pieces[0].equals(username) && pieces[1].equals(password) ) {
+        ((GlobalVariables) getApplication()).setUsername(username);
+        ((GlobalVariables) getApplication()).setPassword(password);
+
+        String response = "";
+        HttpServiceRequest getRequest = new HttpServiceRequest();
+        try {
+            response = getRequest.execute(url).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if(response.equals("ok")){ ;
             ((GlobalVariables) getApplication()).setGraphicsBtnOn(false);
             //opens views page
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

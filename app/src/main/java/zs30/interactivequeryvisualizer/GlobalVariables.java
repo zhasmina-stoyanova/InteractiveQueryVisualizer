@@ -20,6 +20,8 @@ public class GlobalVariables extends Application {
     private String graphicsXAxisAttrType;
     private String graphicsYAxisAttrType;
     private String graphicsType;
+    private static String username;
+    private static String password;
 
     public String getLookupView() {
         return lookupView;
@@ -109,7 +111,23 @@ public class GlobalVariables extends Application {
         this.graphicsYAxisAttrType = graphicsYAxisAttrType;
     }
 
-    //example for call from other activities
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        GlobalVariables.username = username;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String password) {
+        GlobalVariables.password = password;
+    }
+
+//example for call from other activities
     //((GlobalVariables) getApplication()).setViewName("56");
     //String viewName = ((GlobalVariables) getApplication()).getViewName();
 }

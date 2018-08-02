@@ -96,6 +96,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
+                    android:visibility="gone"
                     android:text="or"></TextView>
 
                 <Button
@@ -106,7 +107,8 @@
                     android:background="@drawable/button_background"
                     android:text="continue as GUEST"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
