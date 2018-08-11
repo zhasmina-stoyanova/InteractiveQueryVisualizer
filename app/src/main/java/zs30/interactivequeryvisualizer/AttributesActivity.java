@@ -82,7 +82,7 @@ public class AttributesActivity extends AppCompatActivity {
     public void onFilterBtn(View view) {
         ((GlobalVariables) getApplication()).setAttributesList(attributesList);
         //opens filter page
-        Intent intent = new Intent(AttributesActivity.this, FilterActivity.class);
+        Intent intent = new Intent(AttributesActivity.this, FiltersActivity.class);
         startActivity(intent);
     }
 

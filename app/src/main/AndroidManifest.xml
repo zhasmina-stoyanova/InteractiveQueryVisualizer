@@ -28,7 +28,7 @@
             android:name=".TableActivity"
             android:label="Table results" />
         <activity
-            android:name=".FilterActivity"
+            android:name=".FiltersActivity"
             android:label="Filter and Sort"
             android:windowSoftInputMode="stateHidden" />
         <activity

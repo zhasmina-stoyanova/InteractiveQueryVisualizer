@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class FilterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class FiltersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private List<Attribute> attrsListItems;
     private Map<String, String> whereClauseParams = new HashMap<>();
     private List<EditText> stringsList = new ArrayList<>();
@@ -51,7 +51,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter);
+        setContentView(R.layout.activity_filters);
 
         buttonAtrrsGraphics = findViewById(R.id.button_attr_graphics);
         buttonGraphics = findViewById(R.id.button_graphics);
@@ -474,35 +474,35 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     public void onTableBtn(View view) {
         setGlobalWhereClauseParamsAndAttributesList();
         //opens table page
-        Intent intent = new Intent(FilterActivity.this, TableActivity.class);
+        Intent intent = new Intent(FiltersActivity.this, TableActivity.class);
         startActivity(intent);
     }
 
     public void onViewsBtn(View view) {
         setGlobalWhereClauseParamsAndAttributesList();
         //opens filter page
-        Intent intent = new Intent(FilterActivity.this, LookupViewActivity.class);
+        Intent intent = new Intent(FiltersActivity.this, LookupViewActivity.class);
         startActivity(intent);
     }
 
     public void onAttributeBtn(View view) {
         setGlobalWhereClauseParamsAndAttributesList();
         //opens attributes page
-        Intent intent = new Intent(FilterActivity.this, AttributesActivity.class);
+        Intent intent = new Intent(FiltersActivity.this, AttributesActivity.class);
         startActivity(intent);
     }
 
     public void onAttributeGraphicsBtn(View view) {
         setGlobalWhereClauseParamsAndAttributesList();
         //opens graphics attributes page
-        Intent intent = new Intent(FilterActivity.this, AttributesGraphicsActivity.class);
+        Intent intent = new Intent(FiltersActivity.this, AttributesGraphicsActivity.class);
         startActivity(intent);
     }
 
     public void onGraphicsBtn(View view) {
         setGlobalWhereClauseParamsAndAttributesList();
         //opens graphics page
-        Intent intent = new Intent(FilterActivity.this, GraphicsActivity.class);
+        Intent intent = new Intent(FiltersActivity.this, GraphicsActivity.class);
         startActivity(intent);
     }
 

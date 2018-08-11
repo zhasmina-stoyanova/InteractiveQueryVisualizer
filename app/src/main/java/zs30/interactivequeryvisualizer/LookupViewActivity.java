@@ -232,7 +232,7 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
     public void onFilterBtn(View view) {
         if(areRequiredFieldsFilled()) {
             //opens filter page
-            Intent intent = new Intent(LookupViewActivity.this, FilterActivity.class);
+            Intent intent = new Intent(LookupViewActivity.this, FiltersActivity.class);
             startActivity(intent);
         }
     }

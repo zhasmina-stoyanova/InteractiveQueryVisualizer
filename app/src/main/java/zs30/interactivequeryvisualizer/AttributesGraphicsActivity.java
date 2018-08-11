@@ -183,7 +183,7 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
     public void onFilterBtn(View view) {
         setGlobalGraphicsValues();
         //opens filter page
-        Intent intent = new Intent(AttributesGraphicsActivity.this, FilterActivity.class);
+        Intent intent = new Intent(AttributesGraphicsActivity.this, FiltersActivity.class);
         startActivity(intent);
     }
 

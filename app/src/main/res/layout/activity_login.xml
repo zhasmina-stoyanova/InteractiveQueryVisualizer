@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--RootView-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_layout_login"
@@ -28,12 +29,10 @@
                 android:paddingBottom="@dimen/activity_padding"
                 android:text="@string/login"
                 android:textSize="@dimen/activity_padding" />
-
             <!--username field-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <EditText
                     android:id="@+id/username"
                     android:layout_width="match_parent"
@@ -42,12 +41,10 @@
                     android:maxLines="1"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
-
             <!--password field-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
@@ -66,7 +63,7 @@
                 android:focusableInTouchMode="true"
                 android:text=""
                 android:textColor="#e72705" />
-            <!--sign in button-->
+            <!--login button-->
             <Button
                 android:id="@+id/sign_in_button"
                 style="?android:textAppearanceSmall"
