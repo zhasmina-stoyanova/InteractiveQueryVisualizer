@@ -24,9 +24,9 @@ import java.util.concurrent.ExecutionException;
 public class AttributesGraphicsActivity extends AppCompatActivity implements
         OnItemSelectedListener {
     private Spinner s1, s2;
-    private List<AttributesListItem> attrsListItems;
-    private ArrayAdapter<AttributesListItem> adapter1;
-    private ArrayAdapter<AttributesListItem> adapter2;
+    private List<Attribute> attrsListItems;
+    private ArrayAdapter<Attribute> adapter1;
+    private ArrayAdapter<Attribute> adapter2;
     private Map<String, String> dataTypeCategories = new HashMap<>();
 
     @Override
@@ -71,8 +71,8 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
         attrsListItems = new ArrayList<>();
 
         //if the view hasn't been changed
-        if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
-            attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();
+        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
+            attrsListItems = ((GlobalVariables) getApplication()).getAttributesList();
         } else {
             String lookupView = ((GlobalVariables) getApplication()).getLookupView();
             String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
@@ -93,7 +93,7 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
                     String name = jsonobject.getString("name");
                     String type = jsonobject.getString("type");
-                    attrsListItems.add(new AttributesListItem(name, type));
+                    attrsListItems.add(new Attribute(name, type));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -109,7 +109,7 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         switch (parent.getId()){
             case R.id.spinner1:
-                AttributesListItem spinner1SelectedItem = (AttributesListItem) ((Spinner) findViewById(R.id.spinner1)).getSelectedItem();
+                Attribute spinner1SelectedItem = (Attribute) ((Spinner) findViewById(R.id.spinner1)).getSelectedItem();
 
                 String typeAttr1 = spinner1SelectedItem.getType();
                 String categoryAttr1 = dataTypeCategories.get(typeAttr1);
@@ -127,13 +127,13 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
     }
 
     public void initializeSpinner2(String categoryAttr1){
-        List<AttributesListItem> list = new ArrayList<>();
+        List<Attribute> list = new ArrayList<>();
         for (int i = 0; i < attrsListItems.size(); i++) {
-            String name = attrsListItems.get(i).getAttributeName();
+            String name = attrsListItems.get(i).getName();
             String type = attrsListItems.get(i).getType();
             String categoryAttr2 = dataTypeCategories.get(type);
             if (!categoryAttr1.equals(categoryAttr2)) {
-                list.add(new AttributesListItem(name, type));
+                list.add(new Attribute(name, type));
             }
         }
 
@@ -165,11 +165,11 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
         String graphicsYAxisAttr = getSpinnerValue(R.id.spinner2);
         String graphicsType = getSpinnerValue(R.id.spinner3);
 
-        AttributesListItem spinner2SelectedItem = (AttributesListItem) ((Spinner) findViewById(R.id.spinner2)).getSelectedItem();
+        Attribute spinner2SelectedItem = (Attribute) ((Spinner) findViewById(R.id.spinner2)).getSelectedItem();
         String typeAttr2 = spinner2SelectedItem.getType();
         String categoryAttr2 = dataTypeCategories.get(typeAttr2);
 
-        AttributesListItem spinner1SelectedItem = (AttributesListItem) ((Spinner) findViewById(R.id.spinner1)).getSelectedItem();
+        Attribute spinner1SelectedItem = (Attribute) ((Spinner) findViewById(R.id.spinner1)).getSelectedItem();
         String typeAttr1 = spinner1SelectedItem.getType();
         String categoryAttr1 = dataTypeCategories.get(typeAttr1);
 
@@ -190,7 +190,7 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
     public void onViewsBtn(View view) {
         setGlobalGraphicsValues();
         //opens attributes page
-        Intent intent = new Intent(AttributesGraphicsActivity.this, MainActivity.class);
+        Intent intent = new Intent(AttributesGraphicsActivity.this, LookupViewActivity.class);
         startActivity(intent);
     }
 

@@ -37,8 +37,8 @@ public class TableActivity extends AppCompatActivity {
         String lookupView = ((GlobalVariables) getApplication()).getLookupView();
         String urlToFormat;
 
-        if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
-            List<AttributesListItem> attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();
+        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
+            List<Attribute> attrsListItems = ((GlobalVariables) getApplication()).getAttributesList();
             //lists of attributes
             StringBuilder attrsList = new StringBuilder();
 
@@ -54,8 +54,8 @@ public class TableActivity extends AppCompatActivity {
 
 
             for (int i = 0; i < attrsListItems.size(); i++) {
-                if (attrsListItems.get(i).isAttributeChecked()) {
-                    String attrName = attrsListItems.get(i).getAttributeName();
+                if (attrsListItems.get(i).isSelected()) {
+                    String attrName = attrsListItems.get(i).getName();
                     attrsList.append(attrName + ",");
 
                     //if the map has values, gets those whose attributes has where clause values

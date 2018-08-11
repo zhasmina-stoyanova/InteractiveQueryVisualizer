@@ -16,7 +16,6 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -28,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class LookupViewActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private ListView list_view;
     private SimpleAdapter adapter;
     private SearchView searchView;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_lookup_view);
 
         buttonAtrrsGraphics = findViewById(R.id.button_attr_graphics);
         buttonGraphics = findViewById(R.id.button_graphics);
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 searchView.setQuery(selectedName, false);
                 ((GlobalVariables) getApplication()).setLookupView(selectedName);
                 //clear the old attributes list
-                ((GlobalVariables) getApplication()).getAttrsListItems().clear();
+                ((GlobalVariables) getApplication()).getAttributesList().clear();
                 //clear the where clause params
                 ((GlobalVariables) getApplication()).getWhereClauseParams().clear();
             }
@@ -192,13 +191,13 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
             public boolean onQueryTextChange(String newText) {
-                MainActivity.this.adapter.getFilter().filter(newText);
+                LookupViewActivity.this.adapter.getFilter().filter(newText);
                 ((GlobalVariables) getApplication()).setLookupView(newText);
                 return true;
             }
 
             public boolean onQueryTextSubmit(String query) {
-                MainActivity.this.adapter.getFilter().filter(query);
+                LookupViewActivity.this.adapter.getFilter().filter(query);
                 return true;
             }
         };
@@ -225,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     public void onTableBtn(View view) {
         if(areRequiredFieldsFilled()) {
             //opens table page
-            Intent intent = new Intent(MainActivity.this, TableActivity.class);
+            Intent intent = new Intent(LookupViewActivity.this, TableActivity.class);
             startActivity(intent);
         }
     }
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     public void onFilterBtn(View view) {
         if(areRequiredFieldsFilled()) {
             //opens filter page
-            Intent intent = new Intent(MainActivity.this, FilterActivity.class);
+            Intent intent = new Intent(LookupViewActivity.this, FilterActivity.class);
             startActivity(intent);
         }
     }
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     public void onAttributeBtn(View view) {
         if(areRequiredFieldsFilled()) {
             //opens attributes page
-            Intent intent = new Intent(MainActivity.this, AttributesActivity.class);
+            Intent intent = new Intent(LookupViewActivity.this, AttributesActivity.class);
             startActivity(intent);
         }
     }
@@ -249,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     public void onAttributeGraphicsBtn(View view) {
         if(areRequiredFieldsFilled()) {
             //opens attributes page
-            Intent intent = new Intent(MainActivity.this, AttributesGraphicsActivity.class);
+            Intent intent = new Intent(LookupViewActivity.this, AttributesGraphicsActivity.class);
             startActivity(intent);
         }
     }
@@ -257,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     public void onGraphicsBtn(View view) {
         if(areRequiredFieldsFilled()) {
             //opens table page
-            Intent intent = new Intent(MainActivity.this, GraphicsActivity.class);
+            Intent intent = new Intent(LookupViewActivity.this, GraphicsActivity.class);
             startActivity(intent);
         }
     }

@@ -6,7 +6,7 @@
     tools:context="zs30.interactivequeryvisualizer.AttributesActivity">
 
     <ListView
-        android:id="@+id/attrs_list_view"
+        android:id="@+id/attributes_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

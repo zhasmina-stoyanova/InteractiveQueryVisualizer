@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class FilterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private List<AttributesListItem> attrsListItems;
+    private List<Attribute> attrsListItems;
     private Map<String, String> whereClauseParams = new HashMap<>();
     private List<EditText> stringsList = new ArrayList<>();
     private List<RadioGroup> booleansList = new ArrayList<>();
@@ -101,8 +101,8 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
         attrsListItems = new ArrayList<>();
 
         //if the view hasn't been changed
-        if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
-            attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();
+        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
+            attrsListItems = ((GlobalVariables) getApplication()).getAttributesList();
         } else {
             String lookupView = ((GlobalVariables) getApplication()).getLookupView();
             String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
@@ -123,7 +123,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
                     String name = jsonobject.getString("name");
                     String type = jsonobject.getString("type");
-                    attrsListItems.add(new AttributesListItem(name, type));
+                    attrsListItems.add(new Attribute(name, type));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -142,7 +142,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
 
         for (int i = 0; i < attrsListItems.size(); i++) {
             String attrType = attrsListItems.get(i).getType();
-            final String attrName = attrsListItems.get(i).getAttributeName();
+            final String attrName = attrsListItems.get(i).getName();
             String lookupView = ((GlobalVariables) getApplication()).getLookupView();
             String url = "";
 
@@ -415,8 +415,8 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
         List<String> selectedAttributes = new ArrayList<String>();
 
         for (int i = 0; i < attrsListItems.size(); i++) {
-            if (attrsListItems.get(i).isAttributeChecked()) {
-                selectedAttributes.add(attrsListItems.get(i).getAttributeName());
+            if (attrsListItems.get(i).isSelected()) {
+                selectedAttributes.add(attrsListItems.get(i).getName());
             }
         }
 
@@ -481,7 +481,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     public void onViewsBtn(View view) {
         setGlobalWhereClauseParamsAndAttributesList();
         //opens filter page
-        Intent intent = new Intent(FilterActivity.this, MainActivity.class);
+        Intent intent = new Intent(FilterActivity.this, LookupViewActivity.class);
         startActivity(intent);
     }
 
@@ -548,7 +548,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
         }
 
         ((GlobalVariables) getApplication()).setWhereClauseParams(whereClauseParams);
-        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
+        ((GlobalVariables) getApplication()).setAttributesList(attrsListItems);
     }
 }
 

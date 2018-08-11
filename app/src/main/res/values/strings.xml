@@ -15,6 +15,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="Graphics">GRF</string>
     <string name="action_settings">Settings</string>
+    <string name="login">Login</string>
     <string-array name="graphics_array">
         <item>Bar Chart</item>
         <item>Line Graph</item>

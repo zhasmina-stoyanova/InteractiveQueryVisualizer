@@ -35,7 +35,7 @@
             android:name=".AttributesActivity"
             android:label="Choose Attrubutes" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LookupViewActivity"
             android:label="Choose View" />
         <activity android:name=".AttributesGraphicsActivity" />
         <activity android:name=".GraphicsActivity"></activity>

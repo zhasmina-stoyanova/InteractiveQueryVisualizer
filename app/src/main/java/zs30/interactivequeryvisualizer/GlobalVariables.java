@@ -11,7 +11,7 @@ public class GlobalVariables extends Application {
     private  String lookupView;
     private String sortByAttribute;
     private String order;
-    private  List<AttributesListItem> attrsListItems = new ArrayList<AttributesListItem>();
+    private  List<Attribute> attributesList = new ArrayList<Attribute>();
     public static final String IP_MOBILE_DEVICE = "192.168.42.16";
     private Map<String, String> whereClauseParams = new HashMap<>();
     private boolean graphicsBtnOn = false;
@@ -31,12 +31,12 @@ public class GlobalVariables extends Application {
         this.lookupView = lookupView;
     }
 
-    public List<AttributesListItem> getAttrsListItems() {
-        return attrsListItems;
+    public List<Attribute> getAttributesList() {
+        return attributesList;
     }
 
-    public void setAttrsListItems(List<AttributesListItem> attrsListItems) {
-        this.attrsListItems = attrsListItems;
+    public void setAttributesList(List<Attribute> attributesList) {
+        this.attributesList = attributesList;
     }
 
     public String getSortByAttribute() {

@@ -3,48 +3,47 @@ package zs30.interactivequeryvisualizer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
+/**
+ *
+ * The class represents the attributes activity.
+ * The associated screen is for selecting attributes
+ * of the previously chosen lookup view.
+ *
+ * @version 1.0 August 2018
+ * @author Zhasmina Stoyanova
+ */
 public class AttributesActivity extends AppCompatActivity {
-    private List<AttributesListItem> attrsListItems;
-    private AttributesListViewAdapter adapter;
+    private List<Attribute> attributesList;
+    private AttributesArrayAdapter adapter;
+    private ListView attributesListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attribute);
-        ListView attrsListView = findViewById(R.id.attrs_list_view);
-        attrsListItems = new ArrayList<>();
+        attributesListView = findViewById(R.id.attributes_list_view);
+        attributesList = new ArrayList<>();
 
+        //sets subtitle to the action bar
         getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
 
-        //if the view hasn't been changed
-        if (((GlobalVariables) getApplication()).getAttrsListItems().size() > 0) {
-            attrsListItems = ((GlobalVariables) getApplication()).getAttrsListItems();
+        //checks if the view hasn't been changed
+        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
+            attributesList = ((GlobalVariables) getApplication()).getAttributesList();
         } else {
             String lookupView = ((GlobalVariables) getApplication()).getLookupView();
-            String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
 
-            String response = "";
-            HttpServiceRequest getRequest = new HttpServiceRequest();
-            try {
-                response = getRequest.execute(url).get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
+            String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
+            String response = Utils.getResponse(url);
 
             try {
                 JSONArray jsonarray = new JSONArray(response);
@@ -52,53 +51,45 @@ public class AttributesActivity extends AppCompatActivity {
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
                     String name = jsonobject.getString("name");
                     String type = jsonobject.getString("type");
-                    attrsListItems.add(new AttributesListItem(name, type));
+                    //adds all the values from the response to teh llist
+                    attributesList.add(new Attribute(name, type));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        adapter = new AttributesListViewAdapter(attrsListItems, getApplicationContext());
-        attrsListView.setAdapter(adapter);
+        adapter = new AttributesArrayAdapter(attributesList, getApplicationContext());
+        attributesListView.setAdapter(adapter);
 
-        attrsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        attributesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AttributesListItem currAttrsItem = attrsListItems.get(position);
-                currAttrsItem.setAttributeChecked(!currAttrsItem.isAttributeChecked());
+                Attribute currAttrsItem = attributesList.get(position);
+                currAttrsItem.setSelected(!currAttrsItem.isSelected());
                 adapter.notifyDataSetChanged();
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_menu, menu);
-        return true;
-    }
-
     public void onTableBtn(View view) {
-        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
-
+        ((GlobalVariables) getApplication()).setAttributesList(attributesList);
         //opens table page
         Intent intent = new Intent(AttributesActivity.this, TableActivity.class);
         startActivity(intent);
     }
 
     public void onFilterBtn(View view) {
-        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
-
+        ((GlobalVariables) getApplication()).setAttributesList(attributesList);
         //opens filter page
         Intent intent = new Intent(AttributesActivity.this, FilterActivity.class);
         startActivity(intent);
     }
 
     public void onViewsBtn(View view) {
-        ((GlobalVariables) getApplication()).setAttrsListItems(attrsListItems);
-
-        //opens attributes page
-        Intent intent = new Intent(AttributesActivity.this, MainActivity.class);
+        ((GlobalVariables) getApplication()).setAttributesList(attributesList);
+        //opens the attributes page
+        Intent intent = new Intent(AttributesActivity.this, LookupViewActivity.class);
         startActivity(intent);
     }
 }
