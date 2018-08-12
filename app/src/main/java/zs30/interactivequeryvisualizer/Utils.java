@@ -7,6 +7,16 @@ public class Utils {
     //request to the web service to check the username and password against the database, when the user logs in
     private static String authenticationRequest = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/authentication";
 
+    public static String getLookupViewsRequest() {
+        return lookupViewsRequest;
+    }
+
+    public static void setLookupViewsRequest(String lookupViewsRequest) {
+        Utils.lookupViewsRequest = lookupViewsRequest;
+    }
+
+    private static String lookupViewsRequest = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews";
+
     public static String getResponse(String url) {
         String response = "";
         HttpServiceRequest getRequest = new HttpServiceRequest();
@@ -27,4 +37,8 @@ public class Utils {
     public static void setAuthenticationRequest(String authenticationRequest) {
         Utils.authenticationRequest = authenticationRequest;
     }
+
+
+
+
 }

@@ -16,7 +16,7 @@ import android.widget.TextView;
  *
  * The class represents the login activity.
  * The associated screen is for logging into
- * teh system through username and password.
+ * the system through username and password.
  *
  * @version 1.0 August 2018
  * @author Zhasmina Stoyanova

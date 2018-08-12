@@ -75,20 +75,11 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
         //listener for the search view
         searchViewListener();
 
-        String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews";
+        //requests lookupview resource from the web service
+        String request = Utils.getLookupViewsRequest();
+        String response = Utils.getResponse(request);
 
-        String response = "";
-        HttpServiceRequest getRequest = new HttpServiceRequest();
-        try {
-            response = getRequest.execute(url).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        final ArrayList<Map<String, Object>> itemDataList = new ArrayList<Map<String, Object>>();
-        ;
+        final ArrayList<Map<String, Object>> itemDataList = new ArrayList<>();
 
         try {
             JSONArray jsonarray = new JSONArray(response);
@@ -141,21 +132,17 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
 
     private boolean isChecked = false;
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //menu.findItem(R.id.sort_by_name).setChecked(true);
         switch (item.getItemId()) {
             case R.id.switchButton:
                 isChecked = !item.isChecked();
-                //item.setTitle("some");
                 if (isChecked) {
                     item.setIcon(R.drawable.toggle_right);
                 } else {
                     item.setIcon(R.drawable.toggle_left);
                 }
                 item.setChecked(isChecked);
-
                 return true;
             default:
                 item.setIcon(R.drawable.seek_thumb_disabled);
@@ -165,7 +152,6 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu, menu);
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
@@ -174,16 +160,9 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
                 if (view != null) {
                     switchGraphics = view.findViewById(R.id.switchButton);
                     switchGraphics.setOnCheckedChangeListener(this);
-                    //settings from previous screens
-                    if (((GlobalVariables) getApplication()).isGraphicsBtnOn()) {
-                        switchGraphics.setChecked(true);
-                    } else {
-                        switchGraphics.setChecked(false);
-                    }
                 }
             }
         }
-
         return true;
     }
 
@@ -215,7 +194,8 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
         String selectedLookupView = ((GlobalVariables) getApplication()).getLookupView();
         if (selectedLookupView == null || selectedLookupView.equals("")) {
             searchView.clearFocus();
-            Toast.makeText(this, "The view field is mandatory!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please, choose a view!", Toast.LENGTH_SHORT).show();
+            switchGraphics.setChecked(false);
             return false;
         }
         return true;
@@ -265,16 +245,11 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             ((GlobalVariables) getApplication()).setGraphicsBtnOn(true);
-            buttonAtrrsGraphics.setVisibility(View.VISIBLE);
-            buttonGraphics.setVisibility(View.VISIBLE);
-            buttonAttrsTable.setVisibility(View.GONE);
-            buttonTable.setVisibility(View.GONE);
-        } else {
-            ((GlobalVariables) getApplication()).setGraphicsBtnOn(false);
-            buttonAtrrsGraphics.setVisibility(View.GONE);
-            buttonGraphics.setVisibility(View.GONE);
-            buttonAttrsTable.setVisibility(View.VISIBLE);
-            buttonTable.setVisibility(View.VISIBLE);
+            //opens attributes page
+            if(areRequiredFieldsFilled()) {
+                Intent intent = new Intent(LookupViewActivity.this, AttributesGraphicsActivity.class);
+                startActivity(intent);
+            }
         }
     }
 }

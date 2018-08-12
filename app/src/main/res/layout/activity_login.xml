@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingBottom="@dimen/activity_padding"
-                android:text="@string/login"
+                android:text="@string/login_form"
                 android:textSize="@dimen/activity_padding" />
             <!--username field-->
             <android.support.design.widget.TextInputLayout
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_margin"
                 android:background="@drawable/button_background"
-                android:text="@string/action_sign_in"
+                android:text="@string/login"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
         </LinearLayout>

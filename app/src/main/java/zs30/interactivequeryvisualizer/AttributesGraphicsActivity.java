@@ -35,7 +35,6 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_attributes_graphics);
 
         getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         s1 = findViewById(R.id.spinner1);
         s2 = findViewById(R.id.spinner2);
@@ -198,6 +197,14 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
         setGlobalGraphicsValues();
         //opens attributes page
         Intent intent = new Intent(AttributesGraphicsActivity.this, GraphicsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        ((GlobalVariables) getApplication()).setGraphicsBtnOn(false);
+        //opens attributes page
+        Intent intent = new Intent(AttributesGraphicsActivity.this, LookupViewActivity.class);
         startActivity(intent);
     }
 }
