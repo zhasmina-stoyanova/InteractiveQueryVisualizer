@@ -12,7 +12,7 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:layout_above="@id/buttons">
-        <SearchView
+        <!--<SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,11 +21,20 @@
             android:background="#e5e7e9"
             android:iconifiedByDefault="false"
             android:queryHint="Search..."
-            />
+            />-->
+        <!-- Editext for Search -->
+        <EditText android:id="@+id/inputSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:background="#e5e7e9"
+            android:hint="Search for view..."
+            android:inputType="textVisiblePassword"/>
         <ListView
             android:background="#ffffff"
             android:layout_height="wrap_content"
-            android:id="@+id/attrs_list_view"
+            android:id="@+id/list_view"
             android:layout_width="match_parent" />
     </LinearLayout>
 

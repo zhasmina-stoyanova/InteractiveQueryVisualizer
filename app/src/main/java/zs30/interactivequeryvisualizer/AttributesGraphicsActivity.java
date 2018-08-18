@@ -74,17 +74,10 @@ public class AttributesGraphicsActivity extends AppCompatActivity implements
             attrsListItems = ((GlobalVariables) getApplication()).getAttributesList();
         } else {
             String lookupView = ((GlobalVariables) getApplication()).getLookupView();
-            String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
+            String urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
 
-            String response = "";
-            HttpServiceRequest getRequest = new HttpServiceRequest();
-            try {
-                response = getRequest.execute(url).get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
+            String url = Utils.replaceSpecialSymbolsUrl(urlToFormat);
+            String response = Utils.getResponse(url);
 
             try {
                 JSONArray jsonarray = new JSONArray(response);

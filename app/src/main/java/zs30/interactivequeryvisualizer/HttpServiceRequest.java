@@ -31,7 +31,6 @@ public class HttpServiceRequest extends AsyncTask<String, Void, String> {
             conn.setRequestProperty("Authorization", basicAuth);
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
-            //conn.setDoOutput(false);
             conn.connect();
 
             int status = conn.getResponseCode();

@@ -10,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -25,6 +27,7 @@ public class AttributesActivity extends AppCompatActivity {
     private List<Attribute> attributesList;
     private AttributesArrayAdapter adapter;
     private ListView attributesListView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,9 @@ public class AttributesActivity extends AppCompatActivity {
         } else {
             String lookupView = ((GlobalVariables) getApplication()).getLookupView();
 
-            String url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
+            String urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
+
+            String url = Utils.replaceSpecialSymbolsUrl(urlToFormat);
             String response = Utils.getResponse(url);
 
             try {

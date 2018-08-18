@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
@@ -24,18 +28,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class LookupViewActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private ListView list_view;
-    private SimpleAdapter adapter;
-    private SearchView searchView;
+    private ArrayAdapter<String> adapter;
     private SwitchCompat switchGraphics;
     private Button buttonAtrrsGraphics;
     private Button buttonGraphics;
     private Button buttonAttrsTable;
     private Button buttonTable;
+    private EditText inputSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,11 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
         buttonGraphics = findViewById(R.id.button_graphics);
         buttonAttrsTable = findViewById(R.id.button_attr_table);
         buttonTable = findViewById(R.id.button_table);
+
+        list_view = findViewById(R.id.list_view);
+        inputSearch = findViewById(R.id.inputSearch);
+
+        ((GlobalVariables) getApplication()).setLookupView("");
 
         //check if graphics is on
         //if on hide attr table and table buttons
@@ -64,22 +74,11 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        list_view = findViewById(R.id.attrs_list_view);
-        searchView = findViewById(R.id.searchView);
-
-        String lookupView = ((GlobalVariables) getApplication()).getLookupView();
-        if (lookupView != "") {
-            searchView.setQuery(lookupView, false);
-        }
-
-        //listener for the search view
-        searchViewListener();
-
         //requests lookupview resource from the web service
         String request = Utils.getLookupViewsRequest();
         String response = Utils.getResponse(request);
 
-        final ArrayList<Map<String, Object>> itemDataList = new ArrayList<>();
+        final ArrayList<String> itemDataList = new ArrayList<>();
 
         try {
             JSONArray jsonarray = new JSONArray(response);
@@ -88,44 +87,50 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
 
                 //values for the list view
                 String name = jsonobject.getString("name");
-                String description = jsonobject.getString("description");
-
-                Map<String, Object> listItemMap = new HashMap<String, Object>();
-                listItemMap.put("name", name);
-                listItemMap.put("description", description);
-                itemDataList.add(listItemMap);
+                itemDataList.add(name);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //simple adapter
-        adapter = new SimpleAdapter(this, itemDataList, R.layout.list_view,
-                new String[]{"name", "description"}, new int[]{R.id.name, R.id.description});
-
+        // Adding items to listview
+        adapter = new ArrayAdapter<String>(this, R.layout.list_view, R.id.name, itemDataList);
         list_view.setAdapter(adapter);
+
+        //filtering
+        inputSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                // When user changed the Text
+                LookupViewActivity.this.adapter.getFilter().filter(cs);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
 
         //list item on click listener
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
-                String selectedName = itemDataList.get(index).get("name").toString();
-                searchView.setQuery(selectedName, false);
+                String selectedName = itemDataList.get(index);
+                inputSearch.setText(selectedName);
+               // searchView.setQuery(selectedName, false);
                 ((GlobalVariables) getApplication()).setLookupView(selectedName);
                 //clear the old attributes list
                 ((GlobalVariables) getApplication()).getAttributesList().clear();
                 //clear the where clause params
                 ((GlobalVariables) getApplication()).getWhereClauseParams().clear();
-            }
-        });
-
-        //search text on focus
-        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
             }
         });
     }
@@ -166,23 +171,6 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
         return true;
     }
 
-    private void searchViewListener() {
-        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-
-            public boolean onQueryTextChange(String newText) {
-                LookupViewActivity.this.adapter.getFilter().filter(newText);
-                ((GlobalVariables) getApplication()).setLookupView(newText);
-                return true;
-            }
-
-            public boolean onQueryTextSubmit(String query) {
-                LookupViewActivity.this.adapter.getFilter().filter(query);
-                return true;
-            }
-        };
-        searchView.setOnQueryTextListener(queryTextListener);
-    }
-
     private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
@@ -193,7 +181,7 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
     private boolean areRequiredFieldsFilled() {
         String selectedLookupView = ((GlobalVariables) getApplication()).getLookupView();
         if (selectedLookupView == null || selectedLookupView.equals("")) {
-            searchView.clearFocus();
+            //searchView.clearFocus();
             Toast.makeText(this, "Please, choose a view!", Toast.LENGTH_SHORT).show();
             switchGraphics.setChecked(false);
             return false;

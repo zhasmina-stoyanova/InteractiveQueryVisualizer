@@ -1,5 +1,9 @@
 package zs30.interactivequeryvisualizer;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class Utils {
@@ -38,7 +42,22 @@ public class Utils {
         Utils.authenticationRequest = authenticationRequest;
     }
 
+    public static String replaceSpecialSymbolsUrl(String urlToFormat){
+        Map<String, String> specialSymbols = new HashMap<>();
+        specialSymbols.put("'", "%27");
+        specialSymbols.put(" ", "%20");
+        //replace all special symbols in the url
+        StringBuilder strToReplace = new StringBuilder(urlToFormat);
+        for (Map.Entry<String, String> entry : specialSymbols.entrySet()) {
+            String url = "";
+            if (strToReplace.toString().contains(entry.getKey())) {
+                url = strToReplace.toString().replace(entry.getKey(), entry.getValue());
+                //clear stringBuilder
+                strToReplace.setLength(0);
+                strToReplace.append(url);
+            }
+        }
 
-
-
+        return strToReplace.toString();
+    }
 }

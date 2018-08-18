@@ -28,7 +28,6 @@ import java.util.concurrent.ExecutionException;
 
 public class GraphicsActivity extends AppCompatActivity {
     private Map<String, String> whereClauseParams = new HashMap<>();
-    private Map<String, String> specialSymbolsURL = new HashMap<>();
     private ArrayList<BarEntry> entries = new ArrayList<>();
     private ArrayList<String> labels = new ArrayList<String>();
     ArrayList<Entry> entriesLineGraph = new ArrayList<>();
@@ -59,9 +58,6 @@ public class GraphicsActivity extends AppCompatActivity {
         } else if (graphicsType.equals("Line Graph")) {
             barChart.setVisibility(View.GONE);
         }
-
-        specialSymbolsURL.put("'", "%27");
-        specialSymbolsURL.put(" ", "%20");
 
         String lookupView = ((GlobalVariables) getApplication()).getLookupView();
         String urlToFormat;
@@ -121,29 +117,8 @@ public class GraphicsActivity extends AppCompatActivity {
             urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView;
         }
 
-        //replace all special symbols in the url
-        StringBuilder strToReplace = new StringBuilder(urlToFormat.toString());
-        for (Map.Entry<String, String> entry : specialSymbolsURL.entrySet()) {
-            String url = "";
-            if (strToReplace.toString().contains(entry.getKey())) {
-                url = strToReplace.toString().replace(entry.getKey(), entry.getValue());
-                //clear stringBuilder
-                strToReplace.setLength(0);
-                strToReplace.append(url);
-            }
-        }
-
-        String url = strToReplace.toString();
-
-        String response = "";
-        HttpServiceRequest getRequest = new HttpServiceRequest();
-        try {
-            response = getRequest.execute(url, toString()).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        String url = Utils.replaceSpecialSymbolsUrl(urlToFormat);
+        String response = Utils.getResponse(url);
 
         //get values
         try {
