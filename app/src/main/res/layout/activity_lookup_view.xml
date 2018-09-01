@@ -1,105 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--relative layout for having the buttons at the bottom-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="zs30.interactivequeryvisualizer.LookupViewActivity">
-
+    <!-- linear layout wraps vertically the search field and the list of lookup views-->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_above="@id/buttons"
         android:clickable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        android:layout_above="@id/buttons">
-        <!--<SearchView
-            android:id="@+id/searchView"
+        android:focusable="true">
+        <!--search field-->
+        <EditText
+            android:id="@+id/inputSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:paddingBottom="3dp"
             android:background="#e5e7e9"
-            android:iconifiedByDefault="false"
-            android:queryHint="Search..."
-            />-->
-        <!-- Editext for Search -->
-        <EditText android:id="@+id/inputSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:hint="@string/lookupview"
+            android:inputType="textVisiblePassword"
             android:padding="12dp"
-            android:background="#e5e7e9"
-            android:hint="Search for view..."
-            android:inputType="textVisiblePassword"/>
+            android:textSize="18sp" />
+        <!--list of lookup views-->
         <ListView
-            android:background="#ffffff"
-            android:layout_height="wrap_content"
             android:id="@+id/list_view"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff" />
     </LinearLayout>
-
+    <!--horizontal layout wrap for the buttons
+    with equal widths-->
     <LinearLayout
-        android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-
+        <!--lookup view button-->
         <Button
-            android:id="@+id/button4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/main_button_in_menu"
-            android:text="Views"
-            android:textColor="#FFFFFF"/>
-
+            android:background="@drawable/selected_main_button"
+            android:text="@string/views"
+            android:textColor="#FFFFFF" />
+        <!--attributes button-->
         <Button
-            android:id="@+id/button_attr_table"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/main_buttons"
+            android:background="@drawable/main_button"
             android:onClick="onAttributeBtn"
             android:text="@string/attributes"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF" />
+        <!--filters button-->
         <Button
-            android:id="@+id/button_attr_graphics"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/main_buttons"
-            android:onClick="onAttributeGraphicsBtn"
-            android:text="AttrG"
-            android:textColor="#FFFFFF"/>
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/main_buttons"
+            android:background="@drawable/main_button"
             android:onClick="onFilterBtn"
-            android:textColor="#FFFFFF"
-            android:text="@string/filters" />
-
+            android:text="@string/filters"
+            android:textColor="#FFFFFF" />
+        <!--table button-->
         <Button
-            android:id="@+id/button_table"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/main_buttons"
+            android:background="@drawable/main_button"
             android:onClick="onTableBtn"
-            android:textColor="#FFFFFF"
-            android:text="@string/table" />
-        <Button
-            android:id="@+id/button_graphics"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/main_buttons"
-            android:onClick="onGraphicsBtn"
-            android:textColor="#FFFFFF"
-            android:text="@string/Graphics" />
+            android:text="@string/table"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </RelativeLayout>

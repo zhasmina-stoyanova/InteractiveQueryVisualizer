@@ -9,37 +9,32 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- *
  * The class represents the login activity.
  * The associated screen is for logging into
- * the system through username and password.
+ * the system with username and password.
  *
- * @version 1.0 August 2018
  * @author Zhasmina Stoyanova
+ * @version 1.0 August 2018
  */
 public class LoginActivity extends AppCompatActivity {
     private EditText usernameView;
     private EditText passwordView;
     private TextView errorMsgLoginView;
-    private LinearLayout linearLayoutLogin;
-    private Button signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //references to UI components
-        linearLayoutLogin = findViewById(R.id.linear_layout_login);
+        //referring objects to UI components
         usernameView = findViewById(R.id.username);
         passwordView = findViewById(R.id.password);
         errorMsgLoginView = findViewById(R.id.errorMsg);
 
-        signInButton = findViewById(R.id.sign_in_button);
+        Button signInButton = findViewById(R.id.sign_in_button);
         //tries to login on sign in button click
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -83,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //if the username and password are correct
         if (response.equals("ok")) {
-            //opens lookup views page
+            //opens lookup views screen
             Intent intent = new Intent(LoginActivity.this, LookupViewActivity.class);
             startActivity(intent);
         } else {
@@ -96,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * sets the global parameters for username and password
      */
-    private void setGlobalParameters(String username, String password){
-        ((GlobalVariables) getApplication()).setUsername(username);
-        ((GlobalVariables) getApplication()).setPassword(password);
+    private void setGlobalParameters(String username, String password) {
+        GlobalVariables.username = username;
+        GlobalVariables.password = password;
     }
 }
 

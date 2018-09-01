@@ -26,44 +26,55 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The class represents the graphics activity.
+ * The associated screen is for displaying the
+ * data in the form of bar chart or line graph.
+ *
+ * @author Zhasmina Stoyanova
+ * @version 1.0 August 2018
+ */
 public class GraphicsActivity extends AppCompatActivity {
     private Map<String, String> whereClauseParams = new HashMap<>();
     private ArrayList<BarEntry> entries = new ArrayList<>();
     private ArrayList<String> labels = new ArrayList<String>();
-    ArrayList<Entry> entriesLineGraph = new ArrayList<>();
+    private ArrayList<Entry> entriesLineGraph = new ArrayList<>();
+    private BarChart barChart;
+    private LineChart lineGraph;
+    private String graphicsAttribute1;
+    private String graphicsAttribute2;
+    private String graphicsAttribute1Type;
+    private String graphicsAttribute2Type;
+    private String graphicsType;
+    private String lookupView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //sets the layout resource
         setContentView(R.layout.activity_graphics);
 
+        //referring objects to UI components
+        barChart = findViewById(R.id.chart);
+        lineGraph = findViewById(R.id.line_graph);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
-        String graphicsXAxisAttr = ((GlobalVariables) getApplication()).getGraphicsXAxisAttr();
-        String graphicsYAxisAttr = ((GlobalVariables) getApplication()).getGraphicsYAxisAttr();
-        String graphicsXAxisAttrType = ((GlobalVariables) getApplication()).getGraphicsXAxisAttrType();
-        String graphicsYAxisAttrType = ((GlobalVariables) getApplication()).getGraphicsYAxisAttrType();
-        String graphicsType = ((GlobalVariables) getApplication()).getGraphicsType();
+        setActionBarSubtitle();
 
-        // To make vertical bar chart, initialize graph id this way
-        BarChart barChart = (BarChart) findViewById(R.id.chart);
-        //barChart.getXAxis().setLabelsToSkip(0);
+        loadGlobalParameters();
 
-        LineChart lineGraph = (LineChart) findViewById(R.id.line_graph);
-        //lineGraph.getXAxis().setLabelsToSkip(0);
-
-        //show bar chart or line graph
+        //set the visibility of the UI component depending on the previously chosen data type
         if (graphicsType.equals("Bar Chart")) {
             lineGraph.setVisibility(View.GONE);
         } else if (graphicsType.equals("Line Graph")) {
             barChart.setVisibility(View.GONE);
         }
 
-        String lookupView = ((GlobalVariables) getApplication()).getLookupView();
         String urlToFormat;
 
-        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
-            List<Attribute> attrsListItems = ((GlobalVariables) getApplication()).getAttributesList();
+        //if the user has been to the filters screen the attributesList will not be empty
+        if (GlobalVariables.attributesList.size() > 0) {
+            List<Attribute> attributeList = (GlobalVariables.attributesList);
             //lists of attributes
             StringBuilder attrsList = new StringBuilder();
 
@@ -71,15 +82,15 @@ public class GraphicsActivity extends AppCompatActivity {
             boolean hasWhereClause = false;
             StringBuilder whereClauseList = null;
             //check if there are where clause params
-            if (((GlobalVariables) getApplication()).getWhereClauseParams().size() > 0) {
+            if (GlobalVariables.whereClauseParams.size() > 0) {
                 whereClauseList = new StringBuilder();
                 hasWhereClause = true;
-                whereClauseParams = ((GlobalVariables) getApplication()).getWhereClauseParams();
+                whereClauseParams = GlobalVariables.whereClauseParams;
             }
 
-            for (int i = 0; i < attrsListItems.size(); i++) {
-                if (attrsListItems.get(i).isSelected()) {
-                    String attrName = attrsListItems.get(i).getName();
+            for (int i = 0; i < attributeList.size(); i++) {
+                if (attributeList.get(i).isSelected()) {
+                    String attrName = attributeList.get(i).getName();
                     attrsList.append(attrName + ",");
 
                     //if the map has values, gets those whose attributes has where clause values
@@ -99,8 +110,8 @@ public class GraphicsActivity extends AppCompatActivity {
 
             //check if order by and sort filter has been set
             String orderBy = "";
-            String sortByAttribute = ((GlobalVariables) getApplication()).getSortByAttribute();
-            String order = ((GlobalVariables) getApplication()).getOrder();
+            String sortByAttribute = GlobalVariables.sortByAttribute;
+            String order = GlobalVariables.order;
             if (sortByAttribute != null) {
                 orderBy = "&orderBy=" + sortByAttribute + ":" + order;
             }
@@ -117,7 +128,7 @@ public class GraphicsActivity extends AppCompatActivity {
             urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView;
         }
 
-        String url = Utils.replaceSpecialSymbolsUrl(urlToFormat);
+        String url = Utils.replaceSpecialSymbols(urlToFormat);
         String response = Utils.getResponse(url);
 
         //get values
@@ -135,10 +146,9 @@ public class GraphicsActivity extends AppCompatActivity {
                     String attrName = jsonobject2.getString("attributeName");
                     String attrValue = jsonobject2.getString("attributeValue");
 
-                    if (attrName.equals(graphicsXAxisAttr) || attrName.equals(graphicsYAxisAttr)) {
-
-                        if (attrName.equals(graphicsXAxisAttr)) {
-                            if (graphicsXAxisAttrType.equals("number")) {
+                    if (attrName.equals(graphicsAttribute1) || attrName.equals(graphicsAttribute2)) {
+                        if (attrName.equals(graphicsAttribute1)) {
+                            if (graphicsAttribute1Type.equals("number")) {
                                 //bar chart ot line graph graphics type is chosen
                                 if (graphicsType.equals("Bar Chart")) {
                                     entries.add(new BarEntry(Float.parseFloat(attrValue), indexEntry));
@@ -150,7 +160,7 @@ public class GraphicsActivity extends AppCompatActivity {
                                 labels.add(attrValue);
                             }
                         } else {
-                            if (graphicsYAxisAttrType.equals("number")) {
+                            if (graphicsAttribute2Type.equals("number")) {
                                 //bar chart ot line graph graphics type is chosen
                                 if (graphicsType.equals("Bar Chart")) {
                                     entries.add(new BarEntry(Float.parseFloat(attrValue), indexEntry));
@@ -169,23 +179,53 @@ public class GraphicsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        visualizeBarChartData();
+        visualizeLineGraphData();
+    }
+
+    //if the user has chosen these parameters
+    //from previous screens
+    private void loadGlobalParameters(){
+        graphicsAttribute1 = GlobalVariables.graphicsAttribute1;
+        graphicsAttribute2 = GlobalVariables.graphicsAttribute2;
+        graphicsAttribute1Type = GlobalVariables.graphicsAttribute1Type;;
+        graphicsAttribute2Type = GlobalVariables.graphicsAttribute2Type;
+        graphicsType = GlobalVariables.graphicsType;
+        lookupView = GlobalVariables.lookupView;
+    }
+
+    //sets subtitle for the action bar
+    private void setActionBarSubtitle() {
+        getSupportActionBar().setSubtitle(GlobalVariables.lookupView);
+    }
+
+    //display data through bar chart
+    public void visualizeBarChartData(){
         //bar chart data
         BarDataSet dataset = new BarDataSet(entries, "entries");
+        //each entry gets colors
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
         BarData data = new BarData(labels, dataset);
         barChart.setData(data);
-        barChart.setDescription(((GlobalVariables) getApplication()).getLookupView());
+        //a description located on the right bottom corner of the chart
+        barChart.setDescription(GlobalVariables.lookupView);
+    }
 
+    //display data through line graph
+    public void visualizeLineGraphData(){
         //line graph data
         LineDataSet datasetLineGraph = new LineDataSet(entriesLineGraph, "entries");
+        //each entry gets colors
         datasetLineGraph.setColors(ColorTemplate.COLORFUL_COLORS);
 
         LineData dataLineGraph = new LineData(labels, datasetLineGraph);
         lineGraph.setData(dataLineGraph);
-        lineGraph.setDescription(((GlobalVariables) getApplication()).getLookupView()); // set the description
-
+        //a description located on the right bottom corner of the graph
+        lineGraph.setDescription(GlobalVariables.lookupView);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -196,11 +236,5 @@ public class GraphicsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_menu, menu);
-        return true;
     }
 }

@@ -6,67 +6,47 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- *
  * The class represents the attributes activity.
  * The associated screen is for selecting attributes
  * of the previously chosen lookup view.
  *
- * @version 1.0 August 2018
  * @author Zhasmina Stoyanova
+ * @version 1.0 August 2018
  */
 public class AttributesActivity extends AppCompatActivity {
     private List<Attribute> attributesList;
     private AttributesArrayAdapter adapter;
-    private ListView attributesListView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //sets the layout resource
         setContentView(R.layout.activity_attribute);
-        attributesListView = findViewById(R.id.attributes_list_view);
+        //sets the attributes list view
+        ListView attributesListView = findViewById(R.id.attributes_list_view);
         attributesList = new ArrayList<>();
 
-        //sets subtitle to the action bar
-        getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
+        setActionBarSubtitle();
+        initializeAttributesList();
 
-        //checks if the view hasn't been changed
-        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
-            attributesList = ((GlobalVariables) getApplication()).getAttributesList();
-        } else {
-            String lookupView = ((GlobalVariables) getApplication()).getLookupView();
-
-            String urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
-
-            String url = Utils.replaceSpecialSymbolsUrl(urlToFormat);
-            String response = Utils.getResponse(url);
-
-            try {
-                JSONArray jsonarray = new JSONArray(response);
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    JSONObject jsonobject = jsonarray.getJSONObject(i);
-                    String name = jsonobject.getString("name");
-                    String type = jsonobject.getString("type");
-                    //adds all the values from the response to teh llist
-                    attributesList.add(new Attribute(name, type));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
+       /**
+        * Initializing custom adapter with the list of attributes
+        * that represents the name and the checkbox of each attribute
+        * and the application context.
+        */
         adapter = new AttributesArrayAdapter(attributesList, getApplicationContext());
         attributesListView.setAdapter(adapter);
 
+        //on attribute checkbox click
         attributesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,25 +57,76 @@ public class AttributesActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializing attributes list with already chosen values,
+     * if the user has been to this screen before,
+     * or with new values requested from the web service.
+     */
+    private void initializeAttributesList(){
+        //checks if the view hasn't been changed or initialized
+        if (GlobalVariables.attributesList.size() > 0) {
+            attributesList = GlobalVariables.attributesList;
+        } else {
+            String lookupView = GlobalVariables.lookupView;
+            //requests lookupView attributes resource from the web service
+            String request = Utils.getLookupViewAttributesRequest(lookupView);
+            //replaces special symbols in the request
+            String requestFormatted = Utils.replaceSpecialSymbols(request);
+            //gets response from the web service
+            String response = Utils.getResponse(requestFormatted);
+
+            addResponseResultToList(response, attributesList);
+        }
+    }
+
+    //sets subtitle for the action bar
+    private void setActionBarSubtitle() {
+        getSupportActionBar().setSubtitle(GlobalVariables.lookupView);
+    }
+
+    //sets the attributes list with the response values
+    private void addResponseResultToList(String response, List<Attribute> attributesList) {
+        try {
+            JSONArray jsonarray = new JSONArray(response);
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject jsonobject = jsonarray.getJSONObject(i);
+                String name = jsonobject.getString("name");
+                String type = jsonobject.getString("type");
+                //adds the name and type of each attribute from the response to the list
+                attributesList.add(new Attribute(name, type));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //on table button click
     public void onTableBtn(View view) {
-        ((GlobalVariables) getApplication()).setAttributesList(attributesList);
+        setGlobalAttributesList(attributesList);
         //opens table page
         Intent intent = new Intent(AttributesActivity.this, TableActivity.class);
         startActivity(intent);
     }
 
+    //on filter button click
     public void onFilterBtn(View view) {
-        ((GlobalVariables) getApplication()).setAttributesList(attributesList);
-        //opens filter page
+        setGlobalAttributesList(attributesList);
+        //opens filters page
         Intent intent = new Intent(AttributesActivity.this, FiltersActivity.class);
         startActivity(intent);
     }
 
+    //on views button click
     public void onViewsBtn(View view) {
-        ((GlobalVariables) getApplication()).setAttributesList(attributesList);
+        setGlobalAttributesList(attributesList);
         //opens the attributes page
         Intent intent = new Intent(AttributesActivity.this, LookupViewActivity.class);
         startActivity(intent);
+    }
+
+    //sets the global list of attribute names
+    private void setGlobalAttributesList(List<Attribute> attributesList) {
+        GlobalVariables.attributesList = attributesList;
     }
 }
 

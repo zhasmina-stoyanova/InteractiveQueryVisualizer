@@ -1,22 +1,32 @@
 <resources>
+    <!--name of the app-->
     <string name="app_name">Interactive Query Visualizer</string>
-    <string name="search">Search view...</string>
+
+    <!--buttons-->
     <string name="attributes">Attrs</string>
     <string name="filters">Filters</string>
     <string name="table">Table</string>
     <string name="views">Views</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="Graphics">GRF</string>
 
-    <!-- Strings related to login -->
+    <!-- strings related to login -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Sign in</string>
     <string name="error_field_required">This field is required</string>
-    <string name="Graphics">GRF</string>
-    <string name="action_settings">Settings</string>
     <string name="login">Login</string>
     <string name="login_form">Login Form</string>
+
+    <!--used for the switch component-->
+    <string name="graphics">Graphics</string>
+
+    <!--used in the lookup view as hint-->
+    <string name="lookupview">LookupView</string>
+
+    <!--strings related to attribute graphics screen-->
+    <string name="select_attribute_1">Select Attribute 1</string>
+    <string name="select_attribute_2">Select Attribute 2</string>
+    <string name="graphics_type">Graphics Type</string>
+    <!--spinner values when choosing the type of graphics-->
     <string-array name="graphics_array">
         <item>Bar Chart</item>
         <item>Line Graph</item>

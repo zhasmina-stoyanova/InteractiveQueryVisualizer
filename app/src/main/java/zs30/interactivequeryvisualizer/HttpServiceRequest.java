@@ -17,8 +17,8 @@ public class HttpServiceRequest extends AsyncTask<String, Void, String> {
         String res = null;
         String line;
         try {
-            String name = GlobalVariables.getUsername();
-            String password = GlobalVariables.getPassword();
+            String name = GlobalVariables.username;
+            String password = GlobalVariables.password;
             String authString = name + ":" + password;
 
             byte[] data = authString.getBytes("UTF-8");

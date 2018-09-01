@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="zs30.interactivequeryvisualizer">
-
+    <!--permissions that the app needs when installed on the mobile device-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <!--setting startup icon, name and theme for the app-->
     <application
         android:name=".GlobalVariables"
         android:allowBackup="true"
@@ -15,30 +12,36 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--activities, some have labels that appear in the action bar-->
+        <!--start screen, login form-->
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--shows the data in table-->
         <activity
             android:name=".TableActivity"
             android:label="Table results" />
+        <!--contains the filters used to refine the data-->
         <activity
             android:name=".FiltersActivity"
             android:label="Filter and Sort"
             android:windowSoftInputMode="stateHidden" />
+        <!--activity for selecting table attributes-->
         <activity
             android:name=".AttributesActivity"
-            android:label="Choose Attrubutes" />
+            android:label="Choose Attributes" />
+        <!--activity for choosing lookup view-->
         <activity
             android:name=".LookupViewActivity"
             android:label="Choose View" />
+        <!--activity for selecting graphics attributes and type of visualization-->
         <activity android:name=".AttributesGraphicsActivity" />
-        <activity android:name=".GraphicsActivity"></activity>
+        <!--shows the data through lie graph or bar chart-->
+        <activity android:name=".GraphicsActivity" />
     </application>
-
 </manifest>

@@ -61,7 +61,7 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
         //check if graphics is on
         //if on hide attr table and table buttons
         //and show attr graphics and graphics buttons
-        if (((GlobalVariables) getApplication()).isGraphicsBtnOn()) {
+        if (GlobalVariables.graphicsComponentOn) {
             buttonAtrrsGraphics.setVisibility(View.VISIBLE);
             buttonGraphics.setVisibility(View.VISIBLE);
             buttonAttrsTable.setVisibility(View.GONE);
@@ -95,19 +95,19 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
         dataTypeCategories.put("decimal", "numeric_range");
         // TODO add date to categories
 
-        getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
+        getSupportActionBar().setSubtitle(GlobalVariables.lookupView);
 
         //attributes list items
         attrsListItems = new ArrayList<>();
 
         //if the view hasn't been changed
-        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
-            attrsListItems = ((GlobalVariables) getApplication()).getAttributesList();
+        if (GlobalVariables.attributesList.size() > 0) {
+            attrsListItems = GlobalVariables.attributesList;
         } else {
-            String lookupView = ((GlobalVariables) getApplication()).getLookupView();
+            String lookupView = GlobalVariables.lookupView;
             String urlToFormat = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/attributes";
 
-            String url = Utils.replaceSpecialSymbolsUrl(urlToFormat);
+            String url = Utils.replaceSpecialSymbols(urlToFormat);
             String response = Utils.getResponse(url);
 
             try {
@@ -124,8 +124,8 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
         }
 
         //initialize where clause param map
-        if (((GlobalVariables) getApplication()).getWhereClauseParams().size() > 0) {
-            whereClauseParams = ((GlobalVariables) getApplication()).getWhereClauseParams();
+        if (GlobalVariables.whereClauseParams.size() > 0) {
+            whereClauseParams = GlobalVariables.whereClauseParams;
         }
 
         //the 4 types of layouts
@@ -136,7 +136,7 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
         for (int i = 0; i < attrsListItems.size(); i++) {
             String attrType = attrsListItems.get(i).getType();
             final String attrName = attrsListItems.get(i).getName();
-            String lookupView = ((GlobalVariables) getApplication()).getLookupView();
+            String lookupView = GlobalVariables.lookupView;
             String url = "";
 
             String category = dataTypeCategories.get(attrType) != null ? dataTypeCategories.get(attrType) : attrType;
@@ -272,7 +272,7 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
             } else if (category.equalsIgnoreCase("numeric_range")) {
                 TextView panelLabel = findViewById(R.id.text_number);
                 panelLabel.setVisibility(View.VISIBLE);
-                String min = "";
+                String min = "0.0";
                 String max = "";
                 url = "http://" + GlobalVariables.IP_MOBILE_DEVICE + ":8080/InteractiveQueryVisualizerWS/webapi/lookupviews/" + lookupView + "/extremes?attribute=" + attrName;
                 String response = "";
@@ -304,6 +304,12 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
                 attributeNameTextView.setPadding(0, 0, 10, 0);
                 attributeNameTextView.setTypeface(null, Typeface.BOLD);
 
+                if(min.equals("")){
+                    min = "0.0";
+                }
+                if(max.equals("")){
+                    max = "0.0";
+                }
                 double minDouble = Double.parseDouble(min);
                 double maxDouble = Double.parseDouble(max);
 
@@ -442,22 +448,14 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_menu, menu);
-        return true;
-    }
-
-    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
         if (spinner.getId() == R.id.spinnerSortByAttribute) {
             String item = parent.getItemAtPosition(position).toString();
-            ((GlobalVariables) getApplication()).setSortByAttribute(item);
-            //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+            GlobalVariables.sortByAttribute = item;
         } else if (spinner.getId() == R.id.spinnerOrder) {
             String item = parent.getItemAtPosition(position).toString();
-            ((GlobalVariables) getApplication()).setOrder(item);
-            //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+            GlobalVariables.order = item;
         }
     }
 
@@ -540,8 +538,8 @@ public class FiltersActivity extends AppCompatActivity implements AdapterView.On
             }
         }
 
-        ((GlobalVariables) getApplication()).setWhereClauseParams(whereClauseParams);
-        ((GlobalVariables) getApplication()).setAttributesList(attrsListItems);
+        GlobalVariables.whereClauseParams = whereClauseParams;
+        GlobalVariables.attributesList = attrsListItems;
     }
 }
 

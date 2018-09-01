@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--linear layout to wrap the textview-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <!--item-->
+    <!--item of the list view
+    on lookupView screen contains the name of the view-->
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--selector for the main menu buttons with two states - pressed and normal,
+when the button is not pressed-->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--state of the button - pressed-->
     <item android:state_pressed="true">
         <shape>
             <solid android:color="#00AEF0" />
@@ -8,9 +11,10 @@
             <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
         </shape>
     </item>
+    <!--default state of the button - unpressed-->
     <item>
         <shape>
-            <gradient android:angle="270" android:endColor="#0062AD" android:startColor="#0062AD"/>
+            <gradient android:angle="270" android:endColor="#0062AD" android:startColor="#0062AD" />
             <stroke android:width="0.01dp" android:color="#005291" />
             <corners android:radius="0dp" />
             <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />

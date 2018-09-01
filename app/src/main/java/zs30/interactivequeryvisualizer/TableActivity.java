@@ -29,16 +29,16 @@ public class TableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_table);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle(((GlobalVariables) getApplication()).getLookupView());
+        getSupportActionBar().setSubtitle(GlobalVariables.lookupView);
 
         specialSymbolsURL.put("'", "%27");
         specialSymbolsURL.put(" ", "%20");
 
-        String lookupView = ((GlobalVariables) getApplication()).getLookupView();
+        String lookupView = GlobalVariables.lookupView;
         String urlToFormat;
 
-        if (((GlobalVariables) getApplication()).getAttributesList().size() > 0) {
-            List<Attribute> attrsListItems = ((GlobalVariables) getApplication()).getAttributesList();
+        if (GlobalVariables.attributesList.size() > 0) {
+            List<Attribute> attrsListItems = GlobalVariables.attributesList;
             //lists of attributes
             StringBuilder attrsList = new StringBuilder();
 
@@ -46,10 +46,10 @@ public class TableActivity extends AppCompatActivity {
             boolean hasWhereClause = false;
             StringBuilder whereClauseList = null;
             //check if there are where clause params
-            if (((GlobalVariables) getApplication()).getWhereClauseParams().size() > 0) {
+            if (GlobalVariables.whereClauseParams.size() > 0) {
                 whereClauseList = new StringBuilder();
                 hasWhereClause = true;
-                whereClauseParams = ((GlobalVariables) getApplication()).getWhereClauseParams();
+                whereClauseParams = GlobalVariables.whereClauseParams;
             }
 
 
@@ -76,8 +76,8 @@ public class TableActivity extends AppCompatActivity {
 
             //check if order by and sort filter has been set
             String orderBy = "";
-            String sortByAttribute = ((GlobalVariables) getApplication()).getSortByAttribute();
-            String order = ((GlobalVariables) getApplication()).getOrder();
+            String sortByAttribute = GlobalVariables.sortByAttribute;
+            String order = GlobalVariables.order;
             if (sortByAttribute != null) {
                 orderBy = "&orderBy=" + sortByAttribute + ":" + order;
             }
@@ -215,11 +215,5 @@ public class TableActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_menu, menu);
-        return true;
     }
 }
