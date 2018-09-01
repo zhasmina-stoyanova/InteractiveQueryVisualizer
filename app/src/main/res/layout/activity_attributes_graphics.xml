@@ -104,7 +104,7 @@ attribute and graphics type at the top of the screen-->
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selected_main_button"
-            android:text="@string/attributes"
+            android:text="ATTRG"
             android:textColor="#FFFFFF" />
         <!--filters button-->
         <Button

@@ -54,6 +54,9 @@ public class LookupViewActivity extends AppCompatActivity implements CompoundBut
         //clears the lookup view every time the activity loads
         GlobalVariables.lookupView = "";
 
+        //when the user returns to the screen the graphics is off
+        GlobalVariables.graphicsComponentOn = false;
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //requests lookupview resource from the web service
